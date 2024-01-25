@@ -1,10 +1,27 @@
 import React from "react";
-import "./canvasStyling/Canvas.css";
+import Row from './Row.jsx';
+import styles from './canvasStyling/canvas.js'
 
-function Canvas() {
+
+export default function Canvas(props) {
+    const {
+        Canvas,
+        Pixels,
+    } = styles
+
+    const {width, height, selectedColor} = props;
+
+    let rows = [];
+
+    for (let i = 0; i < height; i++) {
+        rows.push(<Row key={i} width={width} selectedColor={selectedColor} />)
+    }
     return (
-        <div id="canvas"></div>
+        <Canvas id="canvas">
+            <Pixels id='pixels'>
+                {rows}
+            </Pixels>
+        </Canvas>
     );
 }
 
-export default Canvas;

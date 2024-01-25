@@ -1,10 +1,20 @@
-import React from "react";
-import "./canvasStyling/Pixel.css";
+import React, { useState } from "react";
+import styles from './canvasStyling/canvas.js'
 
-function Pixel() {
+
+export default function Pixel(props) {
+    const {
+        Pixel
+    } = styles
+
+    const {selectedColor} = props;
+
+    const [pixelColour, setPixelColor] = useState('#fff');
+    const [oldColor, setOldColour] = useState(pixelColour);
+    const [changeColour, setCanChangeColour] = useState(true);
+
     return (
-        <div className="pixel"></div>
+        <Pixel className="pixel" style={{backgroundColor: pixelColour}}></Pixel>
     );
 }
 
-export default Pixel;

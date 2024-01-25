@@ -4,5 +4,6 @@ export const colors = {
     prussianblue: '#173753',
     licorice: '#110B11',
     coolgrey: '#848FA5',
-    richblack: '#00171F'
+    richblack: '#00171F',
+    celeste: '#ADFCF9',
 }

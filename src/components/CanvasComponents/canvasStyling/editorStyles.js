@@ -12,7 +12,7 @@ export const styles = {
         display: flex;
         flex-direction: column;
         align-items: center;
-        background-color: ${colors.platinum};
+        background-color: ${colors.celeste};
     `,
 
     H1: styled.h1`
@@ -72,10 +72,6 @@ export const styles = {
             background-color: transparent;
             border-color: ${colors.emerald};
         }
-    `,
-
-    CirclePicker: styled.div`
-        margin-bottom: 1.5rem !important;
     `,
 
 }
