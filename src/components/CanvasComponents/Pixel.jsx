@@ -7,14 +7,32 @@ export default function Pixel(props) {
         Pixel
     } = styles
 
-    const {selectedColor} = props;
+    const { selectedColor } = props;
 
-    const [pixelColour, setPixelColor] = useState('#fff');
-    const [oldColor, setOldColour] = useState(pixelColour);
-    const [changeColour, setCanChangeColour] = useState(true);
+    const [pixelColor, setPixelColor] = useState("#fff");
+    const [oldColor, setOldColor] = useState(pixelColor);
+    const [canChangeColor, setCanChangeColor] = useState(true);
+
+    function applyColor() {
+        setPixelColor(selectedColor);
+        setCanChangeColor(false);
+    }
+
+    function changeColourOnHover() {
+        setOldColor(pixelColor);
+        setPixelColor(selectedColor);
+    }
+
+  function resetColor() {
+    if (canChangeColor) {
+      setPixelColor(oldColor);
+    }
+
+    setCanChangeColor(true);
+  }
 
     return (
-        <Pixel className="pixel" style={{backgroundColor: pixelColour}}></Pixel>
+        <Pixel className="pixel" onClick={applyColor} onMouseEnter={changeColourOnHover} onMouseLeave={resetColor} style={{backgroundColor: pixelColor}}></Pixel>
     );
 }
 

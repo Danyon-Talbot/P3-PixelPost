@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { styles } from './canvasStyling/editorStyles';
-import { css } from '@emotion/react' // Imported this as react-color generates its own unique HTML elements that conflict with @emotion/styled
+import { editorStyles } from './canvasStyling/editorStyles';
 import { CirclePicker } from "react-color";
 import Canvas from "./Canvas";
 
@@ -22,7 +21,7 @@ export default function Editor() {
         PanelInput,
         Button,
         Span,
-    } = styles
+    } = editorStyles
     
     function initialiseCanvas() {
         setHideOptions(!hideOptions);
@@ -68,22 +67,22 @@ export default function Editor() {
             </Options>}
             <Button className="button" onClick={initialiseCanvas}>{buttonText}</Button>
 
-            {/* uses @emotion/react instead of custom @emotion/styled elements due to conflicts */}
             {hideOptions && (
             <CirclePicker 
-                css={css`
-                margin-bottom: 1.5rem !important;
-                `}
             color={selectedColor} onChangeComplete={changeColour}/>
             )}
             
+            {hideOptions && (
             <Canvas 
             width={panelWidth}
             height={panelHeight}
             selectedColor={selectedColor}
             />
+            )}
+
+            
+
 
         </EditorContainer>
-
     );
 }
