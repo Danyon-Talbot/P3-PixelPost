@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { editorStyles } from './canvasStyling/editorStyles';
+import { globalStyles } from '../StandardStyles/globalStyles'
 import { CirclePicker } from "react-color";
 import Canvas from "./Canvas";
 
@@ -14,14 +15,17 @@ export default function Editor() {
     // Imports emotion/styled CSS
     const {
         EditorContainer,
-        H1,
-        H2,
         Options,
         HeightWidth,
         PanelInput,
-        Button,
         Span,
     } = editorStyles
+
+    const {
+        Button,
+        H1,
+        H2,
+    } = globalStyles
     
     function initialiseCanvas() {
         setHideOptions(!hideOptions);
