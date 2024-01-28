@@ -28,7 +28,7 @@ export const globalStyles = {
         &:hover {
             cursor: pointer;
             background-color: ${colors.malachite};
-            border-color: ${colors.licorice};
+            border-color: ${colors.emerald};
         }
     `,
 
