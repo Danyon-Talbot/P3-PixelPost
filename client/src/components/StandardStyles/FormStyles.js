@@ -55,8 +55,7 @@ export const FormStyles = {
         &:hover {
             cursor: pointer;
             background-color: ${colors.malachite};
-            border-color: ${colors.emerald};
+            border-color: ${colors.richblack};
         }
     `
-    
 }
