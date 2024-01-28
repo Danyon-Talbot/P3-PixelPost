@@ -27,6 +27,7 @@ export const FormStyles = {
         width: 100%;
     `,
 
+    // Individual Input Styles for potential individual styling
     NameInput: styled.input`
         width: 100%;
     `,
@@ -38,5 +39,24 @@ export const FormStyles = {
     PasswordInput: styled.input`
         width: 100%;
     `,
+
+    // Similar style to global Button, but smaller font size to fit into Form
+    FormButton: styled.button`
+        font-size: 1rem;
+        background-color: ${colors.emerald};
+        color: ${colors.richblack};
+        padding: 1rem 2rem;
+        border-radius: 0.25rem;
+        text-transform: uppercase;
+        border: 1px solid ${colors.richblack};
+        transition: background-color 0.2s ease-in-out;
+        margin-bottom: 1.5rem;
+
+        &:hover {
+            cursor: pointer;
+            background-color: ${colors.malachite};
+            border-color: ${colors.emerald};
+        }
+    `
     
 }

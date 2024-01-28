@@ -11,12 +11,12 @@ export default function LoginForm() {
         FormGroup,
         EmailInput,
         PasswordInput,
+        FormButton,
     } = FormStyles
 
     const {
         H2,
         H3,
-        Button,
     } = globalStyles
 
     const navigate = useNavigate();
@@ -39,7 +39,7 @@ export default function LoginForm() {
                     <PasswordInput type='password' />
                 </FormGroup>
             </LoginForm>
-            <Button onClick={handleSignUpForm}>Sign Up</Button>
+            <FormButton onClick={handleSignUpForm} className="loginButton">Sign Up</FormButton>
         </FormContainer>
     )
 }

@@ -13,6 +13,7 @@ export default function LoginForm() {
         NameInput,
         EmailInput,
         PasswordInput,
+        FormButton,
     } = FormStyles
 
     const {
@@ -23,7 +24,7 @@ export default function LoginForm() {
 
     const navigate = useNavigate();
 
-    const handleSignUpForm = () => {
+    const handleReturnToLogin = () => {
         navigate('/login');
     };
 
@@ -32,7 +33,7 @@ export default function LoginForm() {
             <LoginForm>
                 <H2>Sign Up</H2>
                 <FormGroup>
-                    <H3>Name</H3>
+                    <H3>Username</H3>
                     <NameInput />
                 </FormGroup>
                 <FormGroup>
@@ -43,8 +44,9 @@ export default function LoginForm() {
                     <H3>Password</H3>
                     <PasswordInput type='password' />
                 </FormGroup>
+                <FormButton onclick={handleReturnToLogin} className="signupButton">Create Account</FormButton>
             </LoginForm>
-            <Button onClick={handleSignUpForm}>Log In</Button>
+            <FormButton onClick={handleReturnToLogin}>Have an Account? Log In</FormButton>
         </FormContainer>
     )
 }
