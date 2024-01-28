@@ -6,4 +6,5 @@ export const colors = {
     coolgrey: '#848FA5',
     richblack: '#00171F',
     celeste: '#ADFCF9',
+    malachite: '#53DD6C',
 }

@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { colors } from './colors'
+import { colors } from '../../StandardStyles/colors'
 
 const styles = {
     Canvas: styled.div`
