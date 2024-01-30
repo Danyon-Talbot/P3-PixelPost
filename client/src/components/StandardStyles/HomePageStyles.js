@@ -14,6 +14,7 @@ export const HomepageStyles = {
         flex-direction: column;
         align-items: center;
         background-color: ${colors.celeste};
+        font-family: 'Chivo Mono', monospace;
     `,
 
 }

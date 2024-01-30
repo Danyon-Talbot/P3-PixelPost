@@ -11,6 +11,7 @@ body {
   justify-content: center;
   align-items: center;
   font-family: 'Chivo Mono', monospace;
+  margin-top: 2rem;
   text-align: center;
   min-width: fit-content;
 }

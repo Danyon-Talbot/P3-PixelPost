@@ -59,6 +59,7 @@ export const FormStyles = {
         border: 1px solid ${colors.richblack};
         transition: background-color 0.2s ease-in-out;
         margin-bottom: 1.5rem;
+        font-family: 'Chivo Mono', monospace;
 
         &:hover {
             cursor: pointer;
