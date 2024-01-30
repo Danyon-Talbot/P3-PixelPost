@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { editorStyles } from './canvasStyling/editorStyles';
 import { globalStyles } from '../StandardStyles/globalStyles'
 import { CirclePicker } from "react-color";
+import { useNavigate } from "react-router-dom";
 import Canvas from "./Canvas";
 
 export default function Editor() {
@@ -40,6 +41,11 @@ export default function Editor() {
         setColor(color.hex);
     }
 
+    const navigate = useNavigate();
+
+    const handleReturnToLogin = () => {
+        navigate('/login');
+    };
 
     return (
         <EditorContainer id="editor">
@@ -70,6 +76,7 @@ export default function Editor() {
                 </HeightWidth>
             </Options>}
             <Button className="button" onClick={initialiseCanvas}>{buttonText}</Button>
+            <Button className="button" onClick={handleReturnToLogin}>Log In</Button>
 
             {hideOptions && (
             <CirclePicker 
