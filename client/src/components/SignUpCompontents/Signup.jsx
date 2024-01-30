@@ -4,7 +4,7 @@ import { globalStyles } from "../StandardStyles/globalStyles";
 import SignupForm from './SignupForm';
 import { useNavigate } from "react-router-dom";
 
-export default function Login() {
+const Signup = () => {
     const {
         HomePage,
     } = HomepageStyles;
@@ -27,5 +27,8 @@ export default function Login() {
             <SignupForm />
             <Button onClick={handleDrawWithoutLogin}>Draw Without Login</Button>
         </HomePage>
-    )
-}
+    );
+};
+
+
+export default Signup;

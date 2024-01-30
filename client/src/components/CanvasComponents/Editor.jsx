@@ -5,7 +5,7 @@ import { CirclePicker } from "react-color";
 import { useNavigate } from "react-router-dom";
 import Canvas from "./Canvas";
 
-export default function Editor() {
+const Editor = () => {
     const [panelWidth, setPanelWidth] = useState(16);
     const [panelHeight, setPanelHeight] = useState(16);
     const [hideOptions, setHideOptions] = useState(false);
@@ -96,4 +96,7 @@ export default function Editor() {
 
         </EditorContainer>
     );
-}
+};
+
+
+export default Editor;

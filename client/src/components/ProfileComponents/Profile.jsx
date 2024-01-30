@@ -4,7 +4,7 @@ import { HomepageStyles } from "../StandardStyles/HomePageStyles";
 import { profileStyles } from './profileStyling/ProfileStyles';
 import { useNavigate } from "react-router-dom";
 
-export default function Profile() {
+const Profile = () => {
 
     const {
         UserProfilePage,
@@ -40,4 +40,6 @@ export default function Profile() {
             </UserGalleryDemo>
         </UserProfilePage>
     );
-}
+};
+
+export default Profile;
