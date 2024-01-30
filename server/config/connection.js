@@ -1,7 +1,15 @@
 const mongoose = require('mongoose');
 
-mongoose.connect(
-  process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/pixelpost_db'
-);
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/pixelpost_db', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+});
 
-module.exports = mongoose.connection;
+const db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', () => {
+  console.log('Connected to MongoDB Atlas or local database.');
+});
