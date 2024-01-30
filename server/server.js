@@ -20,7 +20,7 @@ const server = new ApolloServer({
 const startApolloServer = async () => {
     await server.start();
 
-    server.applyMiddleware({ app }); // Use this middleware after server.start()
+    server.applyMiddleware({ app, path: '/graphql' }); // Use this middleware after server.start()
 
     db.once('open', () => {
         app.listen(PORT, () => {
