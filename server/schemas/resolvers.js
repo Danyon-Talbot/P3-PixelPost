@@ -1,4 +1,6 @@
 const User = require('../models/User'); 
+const { hashPassword } = require('../utils/auth'); // Import the utility
+
 
 const resolvers = {
   Query: {
@@ -9,10 +11,13 @@ const resolvers = {
   Mutation: {
     createUser: async (_, { username, email, password }) => {
       try {
+        // Hash the password using the utility function
+        const hashedPassword = await hashPassword(password);
+
         const newUser = new User({
           username,
           email,
-          password, 
+          password: hashedPassword, // Use the hashed password
         });
 
         // Save the user to the database
