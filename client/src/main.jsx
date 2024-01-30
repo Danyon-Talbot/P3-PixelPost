@@ -26,7 +26,7 @@ const router = createBrowserRouter([
         path: 'editor',
         element: <Editor />,
       }, {
-        path: 'profile/:userId',
+        path: 'profile',
         element: <Profile />,
       }
     ]

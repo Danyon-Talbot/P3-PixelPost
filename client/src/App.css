@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Chivo+Mono:ital,wght@0,100..900;1,100..900&family=Inconsolata:wght@500&display=swap');
 
+
 body,
 html {
   margin: 0;
@@ -13,4 +14,5 @@ body {
   font-family: 'Chivo Mono', monospace;
   text-align: center;
   min-width: fit-content;
+  background-color: #173753;
 }
