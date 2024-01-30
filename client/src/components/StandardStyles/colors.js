@@ -7,4 +7,5 @@ export const colors = {
     richblack: '#00171F',
     celeste: '#ADFCF9',
     malachite: '#53DD6C',
+    burgundy: '#780116',
 }
