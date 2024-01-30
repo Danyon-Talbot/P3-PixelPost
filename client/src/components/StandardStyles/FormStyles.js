@@ -39,6 +39,14 @@ export const FormStyles = {
     PasswordInput: styled.input`
         width: 100%;
     `,
+    Warning: styled.p`
+        width: 100%;
+        font-size: 16px;
+        margin-bottom: 0px;
+        border-radius: 0.25rem;
+        background-color: ${colors.coolgrey};
+        color: ${colors.burgundy}
+    `,
 
     // Similar style to global Button, but smaller font size to fit into Form
     FormButton: styled.button`

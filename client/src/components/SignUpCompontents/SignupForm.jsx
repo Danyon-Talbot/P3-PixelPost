@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState} from "react";
 import { FormStyles } from "../StandardStyles/FormStyles";
 import { globalStyles } from "../StandardStyles/globalStyles";
 import { useNavigate } from "react-router-dom";
@@ -14,6 +14,7 @@ export default function LoginForm() {
         EmailInput,
         PasswordInput,
         FormButton,
+        Warning,
     } = FormStyles
 
     const {
@@ -24,25 +25,95 @@ export default function LoginForm() {
 
     const navigate = useNavigate();
 
+    const [formData, setFormData] = useState({
+        username: "",
+        email: "",
+        password: "",
+      });
+    
+      const [errors, setErrors] = useState({
+        username: "",
+        email: "",
+        password: "",
+      });
+
+    const validateFormData = () => {
+        let isValid = true;
+        const newErrors = { ...errors };
+
+        if (formData.username.trim() === "") {
+            newErrors.username = 'Username Is Required';
+            isValid = false;
+        } else {
+            newErrors.username = '';
+        }
+
+        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        if (!emailPattern.test(formData.email)) {
+            newErrors.email = 'Invalid Email Address';
+            isValid = false;
+        } else {
+            newErrors.email = '';
+        }
+
+        if (formData.password.length < 8) {
+            newErrors.password = "Must be at least 8 characters long";
+            isValid = false;
+        } else {
+            newErrors.password = '';
+        }
+
+        setErrors(newErrors);
+        return isValid;
+    };
+
     const handleReturnToLogin = () => {
         navigate('/login');
     };
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (validateFormData()) {
+            console.log('Form Data:', formData);
+        }
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
     return (
         <FormContainer>
-            <LoginForm>
+            <LoginForm onSubmit={handleSubmit}>
                 <H2>Sign Up</H2>
                 <FormGroup>
                     <H3>Username</H3>
-                    <NameInput />
+                    <NameInput
+                        name='username'
+                        value={formData.username}
+                        onChange={handleChange}
+                    />
+                    <Warning className='error'>{errors.username}</Warning>
                 </FormGroup>
                 <FormGroup>
                     <H3>Email</H3>
-                    <EmailInput />
+                    <EmailInput 
+                        name='email'
+                        value={formData.email}
+                        onChange={handleChange}
+                    />
+                    <Warning className='error'>{errors.email}</Warning>
                 </FormGroup>
                 <FormGroup>
                     <H3>Password</H3>
-                    <PasswordInput type='password' />
+                    <PasswordInput 
+                        type='password'
+                        name='password'
+                        value={formData.password}
+                        onChange={handleChange}
+                    />
+                    <Warning className='error'>{errors.password}</Warning>
                 </FormGroup>
                 <FormButton onclick={handleReturnToLogin} className="signupButton">Create Account</FormButton>
             </LoginForm>
