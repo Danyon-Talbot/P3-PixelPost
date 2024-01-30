@@ -2,37 +2,16 @@
   "name": "pixel-post",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
+  "main": "server/server.js",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@emotion/react": "^11.11.3",
-    "@emotion/styled": "^11.11.0",
-    "apollo-server-express": "^3.13.0",
-    "dotenv": "^16.4.1",
-    "express": "^4.18.2",
-    "graphql": "^16.8.1",
-    "jsonwebtoken": "^9.0.2",
-    "mongodb": "4.1",
-    "mongoose": "^8.1.1",
-    "react": "^18.2.0",
-    "react-color": "^2.19.3",
-    "react-component-export-image": "^1.0.6",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.21.3"
+    "start": "node server/server.js --ignore client",
+    "develop": "concurrently \"cd server && npm run watch\" \"cd client && npm run dev\"",
+    "install": "cd server && npm i && cd ../client && npm i",
+    "seed": "cd server && npm run seed",
+    "build": "cd client && npm run build"
   },
   "devDependencies": {
-    "@types/react": "^18.2.15",
-    "@types/react-dom": "^18.2.7",
-    "@vitejs/plugin-react": "^4.0.3",
-    "eslint": "^8.45.0",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.3",
-    "vite": "^4.4.5"
+    "concurrently": "^5.3.0"
   }
 }
