@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { colors } from '../../StandardStyles/colors'
+import { colors } from '../../StandardStyles/colors';
 
 export const editorStyles = {
 

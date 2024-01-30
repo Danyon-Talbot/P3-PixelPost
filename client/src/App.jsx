@@ -4,6 +4,7 @@ import './App.css';
 import Editor from './components/CanvasComponents/Editor';
 import Login from './components/LoginComponents/Login';
 import Signup from './components/SignUpCompontents/Signup';
+import Profile from './components/ProfileComponents/Profile';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -16,6 +17,7 @@ function App() {
           <Route path='/editor' element={<Editor />} />
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Signup />} />
+          <Route path='/profile' element={<Profile />} />
         </Routes>
       </Router>
     </div>
