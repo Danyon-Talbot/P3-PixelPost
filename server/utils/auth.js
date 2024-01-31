@@ -1,15 +1,17 @@
-const { GraphQL } = require('graphql');
+const { GraphQLError } = require('graphql');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 
-async function hashPassword(password) {
-  try {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    return hashedPassword;
-  } catch (error) {
-    throw new Error(`Error hashing password: ${error.message}`);
-  }
-}
+const secret = process.env.JWT_SECRET;
+const expiration = '2h';
 
-module.exports = { hashPassword };
+module.exports = {
+  AuthenticationError: new GraphQLError('Could not authenticate user.', {
+    extensions: {
+      code: 'UNAUTHENTICATED',
+    },
+  }),
+  signToken: function ({ email, username, _id }) {
+    const payload = { email, username, _id };
+    return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
+  },
+};
