@@ -1,6 +1,4 @@
-const User = require('../models/User'); 
-const { hashPassword } = require('../utils/auth'); // Import the utility
-
+const User = require('../models/User');
 
 const resolvers = {
   Query: {
@@ -11,19 +9,21 @@ const resolvers = {
   Mutation: {
     createUser: async (_, { username, email, password }) => {
       try {
-        // Hash the password using the utility function
-        const hashedPassword = await hashPassword(password);
+        // Check if the username is already in use
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+          throw new Error('Username is already taken.');
+        }
 
+        // Create and save the new user without hashing the password
         const newUser = new User({
           username,
           email,
-          password: hashedPassword, // Use the hashed password
+          password, // Note: The password is not hashed
         });
 
-        // Save the user to the database
         const createdUser = await newUser.save();
-
-        return createdUser; // Return the created user
+        return createdUser;
       } catch (error) {
         throw new Error(`Error creating user: ${error.message}`);
       }
@@ -32,3 +32,4 @@ const resolvers = {
 };
 
 module.exports = resolvers;
+
