@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { FormStyles } from "../StandardStyles/FormStyles";
 import { globalStyles } from "../StandardStyles/globalStyles";
 import { useNavigate } from "react-router-dom";
-// import { useMutation } from "@apollo/client";
-// import { createUser} from "../../server/schemas/resolvers"; 
+import createUserMutation from "../../utils/mutations";
 
 export default function SignUpForm() {
   const {
@@ -67,40 +66,41 @@ export default function SignUpForm() {
     return isValid;
 };
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateFormData()) {
       try {
-        const response = await fetch('/graphql', { // Replace with your actual API endpoint
+        const response = await fetch('/graphql', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            query: `
-              mutation {
-                createUser(username: "${formData.username}", email: "${formData.email}", password: "${formData.password}") {
-                  _id
-                  username
-                  email
-                  # Include any other fields you want to retrieve
-                }
-              }
-            `,
+            query: createUserMutation,
+            variables: {
+              username: formData.username,
+              email: formData.email,
+              password: formData.password,
+            },
           }),
         });
   
-        const data = await response.json();
+        if (response.ok) {
+          const data = await response.json();
   
-        if (data.errors) {
-          // Handle any errors here
-          console.error('Error creating user:', data.errors);
+          if (data.errors) {
+            // Handle any errors here
+            console.error('Error creating user:', data.errors);
+          } else {
+            // Handle success (data contains the result of the mutation)
+            console.log('User created:', data.data.createUser);
+  
+            // Optionally, you can redirect the user to another page here
+            navigate('/login');
+          }
         } else {
-          // Handle success (data contains the result of the mutation)
-          console.log('User created:', data.data.createUser);
-  
-          // Optionally, you can redirect the user to another page here
-          navigate('/login');
+          // Handle non-200 HTTP responses (e.g., 400 Bad Request)
+          console.error('HTTP Error:', response.status, response.statusText);
         }
       } catch (error) {
         // Handle network errors or other exceptions
