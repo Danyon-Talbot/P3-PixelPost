@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { FormStyles } from "../StandardStyles/FormStyles";
 import { globalStyles } from "../StandardStyles/globalStyles";
 import { useNavigate } from "react-router-dom";
-import createUserMutation from "../../utils/mutations";
+import { useMutation } from '@apollo/client';
+import { CREATE_USER_MUTATION } from "../../utils/mutations";
 
 export default function SignUpForm() {
   const {
@@ -66,48 +67,31 @@ export default function SignUpForm() {
     return isValid;
 };
 
+const [createUser] = useMutation(CREATE_USER_MUTATION);
+
 const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (validateFormData()) {
-      try {
-        const response = await fetch('/graphql', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            query: createUserMutation,
-            variables: {
-              username: formData.username,
-              email: formData.email,
-              password: formData.password,
-            },
-          }),
-        });
-  
-        if (response.ok) {
-          const data = await response.json();
-  
-          if (data.errors) {
-            // Handle any errors here
-            console.error('Error creating user:', data.errors);
-          } else {
-            // Handle success (data contains the result of the mutation)
-            console.log('User created:', data.data.createUser);
-  
-            // Optionally, you can redirect the user to another page here
-            navigate('/login');
-          }
-        } else {
-          // Handle non-200 HTTP responses (e.g., 400 Bad Request)
-          console.error('HTTP Error:', response.status, response.statusText);
-        }
-      } catch (error) {
-        // Handle network errors or other exceptions
-        console.error('Error creating user:', error);
-      }
+  e.preventDefault();
+  if (validateFormData()) {
+    try {
+      const { data } = await createUser({
+        variables: {
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+        },
+      });
+
+      // Handle success
+      console.log('User created:', data.createUser);
+
+      // Optionally, you can redirect the user to another page here
+      navigate('/login');
+    } catch (error) {
+      // Handle GraphQL errors
+      console.error('Error creating user:', error.message);
     }
-  };
+  }
+};
   
   const handleReturnToLogin = () => {
     navigate('/login');
