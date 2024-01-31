@@ -22,7 +22,7 @@ const typeDefs = `
   }
 
   type Mutation {
-    createUser(username: String!, email: String!, password: String!): User
+    createUser(username: String!, email: String!, password: String!): AuthPayload
     login(email: String!, password: String!): AuthPayload
   }
 

@@ -37,6 +37,8 @@ export default function LoginForm() {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
+        console.log("name:", name);
+        console.log("Value:", value);
 
         setFormData({
             ...formData,
@@ -52,29 +54,32 @@ export default function LoginForm() {
                 variables: { ...formData },
             });
 
-            AuthService.login(data.login.token);
-            navigate('/profile');
+            Auth.login(data.login.token, () => {
+                navigate('/profile');
+
+            
+                setFormData({
+                    email: '',
+                    password: '',
+                });
+            });
         } catch (e) {
             console.error(e);
         }
-
-        setFormData({
-            email: '',
-            password: '',
-        });
     };
 
+    
     return (
         <FormContainer>
             <LoginForm onSubmit={handleLoginSubmit}>
                 <H2>Log In</H2>
                 <FormGroup>
                     <H3>Email</H3>
-                    <EmailInput onchange={handleChange}/>
+                    <EmailInput name="email" onChange={handleChange} />
                 </FormGroup>
                 <FormGroup>
                     <H3>Password</H3>
-                    <PasswordInput type='password' onChange={handleChange} />
+                    <PasswordInput name='password' type='password' onChange={handleChange} />
                 </FormGroup>
                 <FormButton type='submit'>Log In</FormButton>
             </LoginForm>

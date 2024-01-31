@@ -69,39 +69,47 @@ export default function SignUpForm() {
 
 const [createUser] = useMutation(CREATE_USER_MUTATION);
 
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  setFormData({ ...formData, [name]: value });
+};
+
+
 const handleSubmit = async (e) => {
   e.preventDefault();
   if (validateFormData()) {
+    console.log("Username:", formData.username);
+    console.log("Email:", formData.email);
+    console.log("Password:", formData.password);
+    
     try {
       const { data } = await createUser({
         variables: {
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
+          ...formData
         },
       });
 
       // Handle success
       console.log('User created:', data.createUser);
+      const token = data.createUser.token;
+      localStorage.setItem('token', token);
+
 
       // Optionally, you can redirect the user to another page here
       navigate('/login');
-    } catch (error) {
-      // Handle GraphQL errors
-      console.error('Error creating user:', error.message);
+      } catch (error) {
+        // Handle GraphQL errors
+        console.error('Error creating user:', error.message)
+        console.error('GraphQL Error:', error);
+      }
     }
-  }
-};
+  };
   
   const handleReturnToLogin = () => {
     navigate('/login');
-};
+  };
   
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
 
   return (
     <FormContainer>

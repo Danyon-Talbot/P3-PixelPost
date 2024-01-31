@@ -2,9 +2,12 @@ const express = require('express');
 const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
 const path = require('path');
+const cors = require('cors');
 
 const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
+
+const frontendURL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 const PORT = process.env.PORT || 3007;
 const app = express();
@@ -19,6 +22,13 @@ const startApolloServer = async () => {
 
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
+
+  app.use(
+    cors({
+      origin: frontendURL,
+      credentials: true,
+    })
+  );
 
   app.use('/graphql', expressMiddleware(server));
 

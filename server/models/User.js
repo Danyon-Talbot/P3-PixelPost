@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-const { Schema, model } = mongoose;
+const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
 
 // Define the Gallery schema
@@ -14,6 +13,7 @@ const userSchema = new Schema({
     type: String,
     required: true,
     unique: true,
+    default: null
   },
   email: {
     type: String,
@@ -47,6 +47,15 @@ userSchema.pre('save', async function (next) {
     next(error);
   }
 });
+
+userSchema.methods.isCorrectPassword = async function (password) {
+  try {
+    return await bcrypt.compare(password, this.password);
+  } catch (error) {
+    return false;
+  }
+};
+
 
 // Create a User model
 const User = model('User', userSchema);
