@@ -3,10 +3,10 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";;
 
 
 import App from './App.jsx'
-import Editor from './components/CanvasComponents/Editor';
-import Login from './components/LoginComponents/Login';
-import Signup from './components/SignUpCompontents/Signup';
-import Profile from './components/ProfileComponents/Profile';
+import Editor from './pages/Editor.jsx';
+import Login from './pages/Login.jsx';
+import Signup from './pages/Signup.jsx';
+import Profile from './pages/Profile.jsx';
 
 const router = createBrowserRouter([
   {
@@ -23,10 +23,10 @@ const router = createBrowserRouter([
         path: '/signup',
         element: <Signup />,
       }, {
-        path: 'editor',
+        path: '/editor',
         element: <Editor />,
       }, {
-        path: 'profile',
+        path: '/profile',
         element: <Profile />,
       }
     ]

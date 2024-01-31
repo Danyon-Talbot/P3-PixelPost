@@ -1,32 +1,34 @@
 const User = require('../models/User');
+const { signToken, AuthenticationError } = require('../utils/auth')
 
 const resolvers = {
   Query: {
-    getUser: async (_, { _id }) => {
-      return await User.findById(_id);
+    user: async (parent, { username }) => {
+      return User.findOne({ username }).populate('thoughts');
     },
   },
   Mutation: {
-    createUser: async (_, { username, email, password }) => {
-      try {
-        // Check if the username is already in use
-        const existingUser = await User.findOne({ username });
-        if (existingUser) {
-          throw new Error('Username is already taken.');
-        }
+    createUser: async (parent, { username, email, password }) => {
+      const user = await User.create({ username, email, password });
+      const token = signToken(user);
+      return { token, user };
+    },
+    login: async (parent, { email, password }) => {
+      const user = await User.findOne({ email });
 
-        // Create and save the new user without hashing the password
-        const newUser = new User({
-          username,
-          email,
-          password, // Note: The password is not hashed
-        });
-
-        const createdUser = await newUser.save();
-        return createdUser;
-      } catch (error) {
-        throw new Error(`Error creating user: ${error.message}`);
+      if (!user) {
+        throw AuthenticationError;
       }
+
+      const correctPw = await user.isCorrectPassword(password);
+
+      if (!correctPw) {
+        throw AuthenticationError;
+      }
+
+      const token = signToken(user);
+
+      return { token, user };
     },
   },
 };

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { FormStyles } from "../StandardStyles/FormStyles";
 import { globalStyles } from "../StandardStyles/globalStyles";
-import { Form, useNavigate } from "react-router-dom";
-import { useQuery } from '@apollo/client';
-import { LOGIN_QUERY } from '../../utils/queries';
+import { useNavigate } from "react-router-dom";
+import { useMutation } from '@apollo/client';
+import { LOGIN_USER } from '../../utils/mutations';
+
+import AuthService from '../../utils/auth'
 
 export default function LoginForm() {
     
@@ -31,40 +33,48 @@ export default function LoginForm() {
         email: "",
         password: "",
     });
+    const [login, { error, data }] = useMutation(LOGIN_USER);
 
-    const { loading, error, data } = useQuery(LOGIN_QUERY, {
-        variables: {
-            email: formData.email,
-            password: formData.password,
-        },
-        skip: true,
-    });
+    const handleChange = (event) => {
+        const { name, value } = event.target;
 
-    const handleLogin = async (e) => {
-        e.preventDefault(); // Prevent the default form submission
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
 
-        if (error) {
-            // Display the error message
-            console.error('Error:', error.message);
-        } else {
-            // Handle the successful login here
-            console.log('Login successful:', data);
+    const handleLoginSubmit = async (event) => {
+        event.preventDefault();
+        console.log(formData);
+        try {
+            const { data } = await login({
+                variables: { ...formData },
+            });
 
+            AuthService.login(data.login.token);
             navigate('/profile');
+        } catch (e) {
+            console.error(e);
         }
-    };;
+
+        setFormData({
+            email: '',
+            password: '',
+        });
+    };
 
     return (
         <FormContainer>
-            <LoginForm onSubmit={handleLogin}>
+            <LoginForm onSubmit={handleLoginSubmit}>
                 <H2>Log In</H2>
                 <FormGroup>
                     <H3>Email</H3>
-                    <EmailInput />
+                    <EmailInput onchange={handleChange}/>
                 </FormGroup>
                 <FormGroup>
                     <H3>Password</H3>
-                    <PasswordInput type='password' />
+                    <PasswordInput type='password' onChange={handleChange} />
                 </FormGroup>
                 <FormButton type='submit'>Log In</FormButton>
             </LoginForm>

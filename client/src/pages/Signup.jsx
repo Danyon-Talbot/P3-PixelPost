@@ -1,10 +1,10 @@
 import React from "react";
-import { HomepageStyles } from "../StandardStyles/HomePageStyles";
-import { globalStyles } from "../StandardStyles/globalStyles";
-import LoginForm from './LoginForm'
+import { HomepageStyles } from "../components/StandardStyles/HomePageStyles";
+import { globalStyles } from "../components/StandardStyles/globalStyles";
+import SignupForm from '../components/SignUpCompontents/SignupForm';
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Signup = () => {
     const {
         HomePage,
     } = HomepageStyles;
@@ -24,10 +24,11 @@ const Login = () => {
     return (
         <HomePage>
             <H1>Pixel Post</H1>
-            <LoginForm />
+            <SignupForm />
             <Button onClick={handleDrawWithoutLogin}>Draw Without Login</Button>
         </HomePage>
     );
 };
 
-export default Login;
+
+export default Signup;
