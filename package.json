@@ -4,7 +4,6 @@
   "version": "0.0.0",
   "main": "server/server.js",
   "scripts": {
-    "dev": "vite",
     "start": "node server/server.js --ignore client",
     "develop": "concurrently \"cd server && npm run watch\" \"cd client && npm run dev\"",
     "install": "cd server && npm i && cd ../client && npm i",
