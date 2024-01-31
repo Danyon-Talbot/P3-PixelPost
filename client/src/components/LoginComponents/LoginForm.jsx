@@ -54,7 +54,7 @@ export default function LoginForm() {
                 variables: { ...formData },
             });
 
-            Auth.login(data.login.token, () => {
+            AuthService.login(data.login.token, () => {
                 navigate('/profile');
 
             
