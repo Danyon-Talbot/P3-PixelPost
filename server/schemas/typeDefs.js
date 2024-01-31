@@ -12,13 +12,20 @@ const typeDefs = `
     filePath: String!
   }
 
+  type AuthPayload {
+    token: String!
+    user: User!
+  }
+
   type Query {
-    getUser(_id: ID!): User
+    user(username: String!): User
   }
 
   type Mutation {
-    createUser(username: String!, email: String!, password: String!): User
+    createUser(username: String!, email: String!, password: String!): AuthPayload
+    login(email: String!, password: String!): AuthPayload
   }
+
 `;
 
 module.exports = typeDefs;

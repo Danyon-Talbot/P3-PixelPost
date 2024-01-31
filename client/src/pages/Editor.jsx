@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { editorStyles } from './canvasStyling/editorStyles';
-import { globalStyles } from '../StandardStyles/globalStyles'
+import { editorStyles } from '../components/CanvasComponents/canvasStyling/editorStyles';
+import { globalStyles } from '../components/StandardStyles/globalStyles'
 import { CirclePicker } from "react-color";
 import { useNavigate } from "react-router-dom";
-import Canvas from "./Canvas";
+import Canvas from "../components/CanvasComponents/Canvas";
 
 const Editor = () => {
     const [panelWidth, setPanelWidth] = useState(16);

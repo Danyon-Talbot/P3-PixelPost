@@ -1,7 +1,7 @@
 import React from 'react';
-import { globalStyles } from '../StandardStyles/globalStyles';
-import { HomepageStyles } from "../StandardStyles/HomePageStyles";
-import { profileStyles } from './profileStyling/ProfileStyles';
+import { globalStyles } from '../components/StandardStyles/globalStyles';
+import { HomepageStyles } from "../components/StandardStyles/HomePageStyles";
+import { profileStyles } from '../components/ProfileComponents/profileStyling/ProfileStyles';
 import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
