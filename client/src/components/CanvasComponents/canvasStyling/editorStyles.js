@@ -46,5 +46,6 @@ export const editorStyles = {
 
     Span: styled.span`
         font-size: 1.5rem;
+        margin-bottom: 0.5rem;
     `,
 }

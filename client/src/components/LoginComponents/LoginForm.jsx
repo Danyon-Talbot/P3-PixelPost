@@ -16,6 +16,7 @@ export default function LoginForm() {
         EmailInput,
         PasswordInput,
         FormButton,
+        Warning
     } = FormStyles
 
     const {
@@ -34,11 +35,12 @@ export default function LoginForm() {
         password: "",
     });
     const [login, { error, data }] = useMutation(LOGIN_USER);
+    const [loginError, setLoginError] = useState(null);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-        console.log("name:", name);
-        console.log("Value:", value);
+        console.log("name:", name); //REMOVE THIS BEFORE LIVE PUSH
+        console.log("Value:", value); //REMOVE THIS BEFORE LIVE PUSH
 
         setFormData({
             ...formData,
@@ -66,6 +68,7 @@ export default function LoginForm() {
             });
         } catch (e) {
             console.error(e);
+            setLoginError("Login failed. Please check your credentials");
         }
     };
 
@@ -83,6 +86,7 @@ export default function LoginForm() {
                     <PasswordInput name='password' type='password' onChange={handleChange} />
                 </FormGroup>
                 <FormButton type='submit'>Log In</FormButton>
+                <Warning>{loginError && <p className="warning">{loginError}</p>}</Warning> {/* Display error message if login fails */}
             </LoginForm>
             <FormButton onClick={handleGoToSignUpForm} className="signup-button">Sign Up</FormButton>
         </FormContainer>
