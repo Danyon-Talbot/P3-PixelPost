@@ -16,7 +16,7 @@ class AuthService {
     const decoded = jwtDecode(token);
     // If the expiration time is less than the current time (in seconds), the token is expired, and we return `true`
     if (decoded.exp < Date.now() / 1000) {
-      localStorage.removeItem('id_token');
+      localStorage.removeItem('token');
       return true;
     }
     // If the token hasn't passed its expiration time, return `false`
@@ -24,17 +24,24 @@ class AuthService {
   }
 
   getToken() {
-    return localStorage.getItem('id_token');
+    return localStorage.getItem('token');
   }
 
-  login(idToken) {
-    localStorage.setItem('id_token', idToken);
-    window.location.assign('/');
+  getUsername() {
+    return localStorage.getItem('username');
+  }
+
+  login(idToken, username, callback) {
+    localStorage.setItem('token', idToken);
+    localStorage.setItem('username', username); 
+    if (callback && typeof callback === 'function') {
+      callback();
+    }
   }
 
   logout() {
-    localStorage.removeItem('id_token');
-    window.location.reload();
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
   }
 }
 

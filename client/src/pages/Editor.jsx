@@ -5,6 +5,9 @@ import { CirclePicker } from "react-color";
 import { useNavigate } from "react-router-dom";
 import Canvas from "../components/CanvasComponents/Canvas";
 
+import AuthService from '../utils/auth';
+
+
 const Editor = () => {
     const [panelWidth, setPanelWidth] = useState(16);
     const [panelHeight, setPanelHeight] = useState(16);
@@ -47,6 +50,14 @@ const Editor = () => {
         navigate('/login');
     };
 
+    const navigateToProfile = () => {
+        const username = AuthService.getUsername();
+        navigate(`/profile/${username}`)
+    }
+
+    const isAuthenticated = AuthService.loggedIn(); 
+
+
     return (
         <EditorContainer id="editor">
             <H1>PIXEL POST</H1>
@@ -76,7 +87,12 @@ const Editor = () => {
                 </HeightWidth>
             </Options>}
             <Button className="button" onClick={initialiseCanvas}>{buttonText}</Button>
-            <Button className="button" onClick={handleReturnToLogin}>Log In</Button>
+            
+            {isAuthenticated ? (
+                <Button className="button" onClick={navigateToProfile}>Go To Profile</Button>
+            ) : (
+                <Button className="button" onClick={handleReturnToLogin}>Log In</Button>
+            )}
 
             {hideOptions && (
             <CirclePicker 

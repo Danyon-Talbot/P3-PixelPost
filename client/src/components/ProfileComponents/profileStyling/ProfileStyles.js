@@ -10,7 +10,7 @@ export const profileStyles = {
         border-radius: 0.25rem;
         padding: 1rem 4rem 2rem 4rem;
         margin-top: 1rem;
-        background-color: ${colors.celeste};
+        background-color: ${colors.prussianblue};
         width: 100%;
     `,
 

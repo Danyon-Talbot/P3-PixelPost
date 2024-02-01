@@ -4,6 +4,8 @@ import styles from './canvasStyling/canvas.js'
 import { globalStyles } from "../StandardStyles/globalStyles.js";
 import { exportComponentAsPNG } from "react-component-export-image";
 
+import AuthService from '../../utils/auth.js';
+
 export default function Canvas(props) {
     const {
         Canvas,
@@ -11,12 +13,15 @@ export default function Canvas(props) {
     } = styles;
 
     const {
-        Button
+        Button,
+        ButtonAuthenticated
     } = globalStyles;
 
     const {width, height, selectedColor} = props;
 
     const canvasRef = useRef();
+
+    const isAuthenticated = AuthService.loggedIn(); 
 
     let rows = [];
 
@@ -28,7 +33,15 @@ export default function Canvas(props) {
             <Pixels id='pixels' ref={canvasRef}>
                 {rows}
             </Pixels>
-            <Button onClick={() => exportComponentAsPNG(canvasRef)} className="button">Download as PNG</Button>
+            
+            {isAuthenticated ? (
+                <div>
+                <ButtonAuthenticated className="button">Save To Gallery</ButtonAuthenticated>
+                <ButtonAuthenticated onClick={() => exportComponentAsPNG(canvasRef)} className="button">Download as PNG</ButtonAuthenticated>
+                </div>
+            ) : (
+                <Button onClick={() => exportComponentAsPNG(canvasRef)} className="button">Download as PNG</Button>
+            )}
         </Canvas>
     );
 }

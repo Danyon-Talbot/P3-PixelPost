@@ -7,6 +7,7 @@ import Editor from './pages/Editor.jsx';
 import Login from './pages/Login.jsx';
 import Signup from './pages/Signup.jsx';
 import Profile from './pages/Profile.jsx';
+import RequireAuth from './utils/privateRoutes.js';
 
 const router = createBrowserRouter([
   {
@@ -15,22 +16,30 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Editor />
+        element: <Login />
       }, {
         path: '/login',
         element: <Login />,
       }, {
         path: '/signup',
         element: <Signup />,
-      }, {
+      }, 
+      {
         path: '/editor',
         element: <Editor />,
+      }, {
+        path: '/editor/:username',
+        element: <RequireAuth>
+          <Editor />
+          </RequireAuth>,
       }, {
         path: '/profile',
         element: <Profile />,
       }, {
         path: '/profile/:username',
-        element: <Profile />,
+        element: <RequireAuth>
+          <Profile />
+          </RequireAuth>,
       }
     ]
   },
