@@ -1,12 +1,12 @@
 import React from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { globalStyles } from '../components/StandardStyles/globalStyles';
 import { HomepageStyles } from "../components/StandardStyles/HomePageStyles";
 import { profileStyles } from '../components/ProfileComponents/profileStyling/ProfileStyles';
-import { useNavigate } from "react-router-dom";
-
-import AuthService from '../utils/auth'
+import AuthService from '../utils/auth';
 
 const Profile = () => {
+    const { username } = useParams(); // Get the username from the URL parameter
 
     const {
         UserProfilePage,
@@ -24,38 +24,36 @@ const Profile = () => {
         Button,
     } = globalStyles;
 
+    const isAuthenticated = AuthService.loggedIn(); 
+
     const navigate = useNavigate();
 
-    const username = AuthService.getUsername();
-
     const handleGoToEditor = () => {
+        // Use the extracted username in your navigation
         navigate(`/editor/${username}`);
     };
-
-    const isAuthenticated = AuthService.loggedIn(); 
 
     const handleLogOut = () => {
         AuthService.logout();
         navigate('/login');
     }
 
+    const storedUsername = localStorage.getItem('username');
+
     return (
         <UserProfilePage>
             <HomePage>
-                <H1>Pixel Post</H1>
-                <H2>Welcome To Your Profile</H2>
+                <H1>Welcome To Pixel Post</H1>
+                <H2>{storedUsername}</H2>
+
+                {isAuthenticated && (
+                    <Button onClick={handleLogOut}>Logout</Button>
+                )}
+                
                 <Button onClick={handleGoToEditor}>Open Canvas</Button>
-
-            {isAuthenticated ? (
-                <Button onClick={handleLogOut}>Logout</Button>
-            ) : (
-                <Button>Nothing</Button>
-            )}
-
-            
             </HomePage>
             <UserGalleryDemo>
-                <H1>Gallery Demo Section</H1>
+                <H1>Your Gallery</H1>
             </UserGalleryDemo>
         </UserProfilePage>
     );
