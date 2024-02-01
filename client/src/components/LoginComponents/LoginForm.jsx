@@ -53,15 +53,16 @@ export default function LoginForm() {
             const { data } = await login({
                 variables: { ...formData },
             });
+            const username = data.login.user.username;
 
-            AuthService.login(data.login.token, () => {
-                navigate('/profile');
-
-            
+            AuthService.login(data.login.token, username, () => {
                 setFormData({
                     email: '',
                     password: '',
                 });
+                
+                const storedUsername = AuthService.getUsername();
+                navigate(`/profile/${storedUsername}`);
             });
         } catch (e) {
             console.error(e);
