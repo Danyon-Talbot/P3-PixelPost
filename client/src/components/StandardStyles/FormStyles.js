@@ -42,7 +42,7 @@ export const FormStyles = {
     Warning: styled.p`
         width: 100%;
         font-size: 16px;
-        margin-bottom: 0px;
+        margin-top: 0;
         border-radius: 0.25rem;
         background-color: ${colors.coolgrey};
         color: ${colors.burgundy}
@@ -58,7 +58,7 @@ export const FormStyles = {
         text-transform: uppercase;
         border: 1px solid ${colors.richblack};
         transition: background-color 0.2s ease-in-out;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
         font-family: 'Chivo Mono', monospace;
 
         &:hover {

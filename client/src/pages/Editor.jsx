@@ -91,7 +91,7 @@ const Editor = () => {
             {isAuthenticated ? (
                 <Button className="button" onClick={navigateToProfile}>Go To Profile</Button>
             ) : (
-                <Button className="button" onClick={handleReturnToLogin}>Log In</Button>
+                <Button className="button" onClick={handleReturnToLogin}>Login To Save</Button>
             )}
 
             {hideOptions && (
