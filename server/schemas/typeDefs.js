@@ -1,4 +1,6 @@
 const typeDefs = `
+  scalar Upload
+
   type User {
     _id: ID!
     username: String!
@@ -8,8 +10,7 @@ const typeDefs = `
   }
 
   type Gallery {
-    fileName: String!
-    filePath: String!
+    images: [Image]
   }
 
   type AuthPayload {
@@ -19,11 +20,25 @@ const typeDefs = `
 
   type Query {
     user(username: String!): User
+    getUserGallery(username: String!): Gallery
   }
 
   type Mutation {
     createUser(username: String!, email: String!, password: String!): AuthPayload
     login(email: String!, password: String!): AuthPayload
+    saveToGallery(file: Upload!): Image
+  }
+
+  type Image {
+    _id: ID!
+    name: String
+    desc: String
+    img: ImageData
+  }
+  
+  type ImageData {
+    data: String
+    contentType: String
   }
 
 `;

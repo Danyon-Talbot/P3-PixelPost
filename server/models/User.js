@@ -1,10 +1,15 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
+const { Image } =  require('./Image')
 
 // Define the Gallery schema
 const gallerySchema = new Schema({
-  fileName: String,
-  filePath: String,
+  images: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: Image
+    }
+  ]
 });
 
 // Define the User schema
@@ -25,7 +30,7 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  gallery: [gallerySchema],
+  gallery: gallerySchema,
 });
 
 // Define a pre-save hook to hash the password before saving

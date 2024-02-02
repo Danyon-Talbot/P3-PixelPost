@@ -29,8 +29,7 @@ const Profile = () => {
     const navigate = useNavigate();
 
     const handleGoToEditor = () => {
-        // Use the extracted username in your navigation
-        navigate(`/editor/${username}`);
+        navigate('/editor');
     };
 
     const handleLogOut = () => {
@@ -45,12 +44,11 @@ const Profile = () => {
             <HomePage>
                 <H1>Welcome To Pixel Post</H1>
                 <H2>{storedUsername}</H2>
-
+                <Button onClick={handleGoToEditor}>Open Canvas</Button>
                 {isAuthenticated && (
                     <Button onClick={handleLogOut}>Logout</Button>
                 )}
-                
-                <Button onClick={handleGoToEditor}>Open Canvas</Button>
+            
             </HomePage>
             <UserGalleryDemo>
                 <H1>Your Gallery</H1>

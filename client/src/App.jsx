@@ -1,4 +1,5 @@
 import './App.css';
+import React, { useEffect, useState } from 'react';
 import { 
   ApolloClient, 
   ApolloProvider, 
@@ -9,26 +10,43 @@ import { setContext } from '@apollo/client/link/context';
 import { Outlet } from 'react-router-dom';
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:3007/graphql', 
+  uri: '/graphql', 
 });
 
-const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem('id_token');
+const AppProvider = () => {
+  const [token, setToken] = useState(null);
 
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : '',
-    },
-  };
-});
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
 
-const client = new ApolloClient({
-  link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
-});
+  const authLink = setContext((_, { headers }) => {
+    try {
+      const token = localStorage.getItem('token');
+      console.log('Retrieved User Token', token);
+  
+      return {
+        headers: {
+          ...headers,
+          Authorization: token ? `Bearer ${token}` : '', // Include "Bearer" prefix
+        },
+      };
+    } catch (error) {
+      console.error('Error retrieving token:', error);
+      return {
+        headers,
+      };
+    }
+  });
 
-function App() {
+  const client = new ApolloClient({
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache(),
+  });
+
   return (
     <ApolloProvider client={client}>
       <div className="App">
@@ -36,6 +54,13 @@ function App() {
       </div>
     </ApolloProvider>
   );
+
+}
+
+function App() {
+   return (
+    <AppProvider />
+   );
 }
 
 export default App;

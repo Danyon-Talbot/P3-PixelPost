@@ -25,10 +25,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/editor',
-        element:<Editor />,
+        element: <Editor />,
       },
       {
-        path: '/editor/:username'
+        path: '/editor/:username',
+        element: <Editor />
       },
       {
         path: '/profile',

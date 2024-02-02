@@ -78,10 +78,6 @@ const handleChange = (e) => {
 const handleSubmit = async (e) => {
   e.preventDefault();
   if (validateFormData()) {
-    console.log("Username:", formData.username);
-    console.log("Email:", formData.email);
-    console.log("Password:", formData.password);
-    
     try {
       const { data } = await createUser({
         variables: {

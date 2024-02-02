@@ -22,3 +22,17 @@ export const LOGIN_USER = gql`
     }
   }
 `;
+
+export const SAVE_TO_GALLERY_MUTATION = gql`
+  mutation saveToGallery($file: Upload!) {
+    saveToGallery(file: $file) {
+      _id
+      name
+      desc
+      img {
+        data
+        contentType
+      }
+    }
+  }
+`;
