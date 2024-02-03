@@ -1,16 +1,6 @@
 const { Schema, model } = require('mongoose');
 const bcrypt = require('bcrypt');
-const { Image } =  require('./Image')
 
-// Define the Gallery schema
-const gallerySchema = new Schema({
-  images: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: Image
-    }
-  ]
-});
 
 // Define the User schema
 const userSchema = new Schema({
@@ -18,7 +8,7 @@ const userSchema = new Schema({
     type: String,
     required: true,
     unique: true,
-    default: null
+    trim: true,
   },
   email: {
     type: String,
@@ -29,11 +19,16 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true,
+    minlength: 8,
   },
-  gallery: gallerySchema,
+  gallery: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Image'
+    },
+  ],
 });
 
-// Define a pre-save hook to hash the password before saving
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     // If the password is not modified, move to the next middleware
@@ -52,7 +47,6 @@ userSchema.pre('save', async function (next) {
     next(error);
   }
 });
-
 userSchema.methods.isCorrectPassword = async function (password) {
   try {
     return await bcrypt.compare(password, this.password);

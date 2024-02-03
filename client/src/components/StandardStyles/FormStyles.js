@@ -39,10 +39,11 @@ export const FormStyles = {
     PasswordInput: styled.input`
         width: 100%;
     `,
-    Warning: styled.p`
+    Warning: styled.div`
         width: 100%;
         font-size: 16px;
         margin-top: 0;
+        margin-bottom: 0.5rem;
         border-radius: 0.25rem;
         background-color: ${colors.coolgrey};
         color: ${colors.burgundy}

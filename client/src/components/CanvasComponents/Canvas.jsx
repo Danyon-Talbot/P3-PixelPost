@@ -5,6 +5,7 @@ import { globalStyles } from "../StandardStyles/globalStyles.js";
 import AuthService from "../../utils/auth.js";
 import { useMutation } from "@apollo/client";
 import html2canvas from "html2canvas";
+import { exportComponentAsPNG } from 'react-component-export-image';
 
 import { SAVE_TO_GALLERY_MUTATION } from "../../utils/mutations.js";
 import { QUERY_USER_GALLERY } from "../../utils/queries.js";
@@ -71,11 +72,13 @@ export default function Canvas(props) {
         context: {
           headers: {
             "content-type": "application/json",
+            Authorization: `Bearer ${AuthService.getToken()}`,
           },
-          profile: AuthService.getProfile(),
         },
       });
+      console.log("Request Headers:" , result.context.headers);
 
+      
       console.log("Called saveToGalleryMutation");
       if (result.errors) {
         // Handle GraphQL errors

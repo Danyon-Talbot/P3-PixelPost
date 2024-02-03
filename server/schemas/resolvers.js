@@ -1,16 +1,17 @@
-const User = require('../models/User');
+const { User, Image } = require('../models/index');
 const { signToken, AuthenticationError } = require('../utils/auth');
+// const { GraphQLUpload } = require('graphql-upload/GraphQLUpload.mjs');
 const { createReadStream, createWriteStream } = require("fs");
 const path = require("path");
-const mongoose = require('mongoose'); // Import mongoose
 const fs = require('fs'); // Import fs
 
-
 const resolvers = {
+  // Upload: GraphQLUpload,
+
   Query: {
-    // user: async (parent, { username }) => {
-    //   return User.findOne({ username }).populate('thoughts');
-    // },
+    userAll: async () => {
+      return await User.find({})
+    }
   },
   Mutation: {
     createUser: async (parent, { username, email, password }) => {
@@ -26,9 +27,9 @@ const resolvers = {
           username,
           email,
           password,
-          gallery: { images: [] },
         });
-    
+        
+        // Creates token based on the user data
         const token = signToken(user);
         return { token, user };
       } catch (error) {
@@ -55,12 +56,11 @@ const resolvers = {
       return { token, user };
     },
     saveToGallery: async (parent, { file }, context) => { 
-      const profile = context.profile; // Destructure profile from context
+      const profile = context.profile;
       if (profile) {
-        const { _id, username } = profile; // Destructure _id and username from profile
+        const { _id, username } = profile;
     
         try {
-          console.log('ID:', _id);
           const user = await User.findById(_id);
     
           if (!user) {
@@ -72,39 +72,29 @@ const resolvers = {
           const newFilename = `${user._id}_${Date.now()}${ext}`;
           const galleryDirectory = path.join(__dirname, `../globalGallery/${username}`);
     
-          // Create the gallery directory if it doesn't exist
           if (!fs.existsSync(galleryDirectory)) {
             fs.mkdirSync(galleryDirectory, { recursive: true });
           }
     
           const filePath = path.join(galleryDirectory, newFilename);
-    
-          // Create a write stream to save the file
           const writeStream = createWriteStream(filePath);
     
-          // Pipe the read stream to the write stream
           createReadStream().pipe(writeStream);
     
-          // Create an Image object
-          const image = {
-            _id: new mongoose.Types.ObjectId(), // Generate a new ObjectId for the image
-            name: "", // Initialize name as empty string
-            desc: "", // Initialize desc as empty string
-            img: {
-              data: newFilename, // Store the filename as data
-              contentType: ext.substring(1), // Store the file extension as contentType
-            },
-          };
+          const image = new Image({
+            filename: newFilename,
+            contentType: ext.substring(1), // Remove the dot from the extension
+            path: filePath,
+          });
     
-          // Add the image to the user's gallery.images array
-          user.gallery.images.push(image);
+          await image.save();
     
-          // Save the updated user document
+          user.gallery.push(image); // Push the image object into the user's gallery array
+    
           await user.save();
     
           return image; // Return the Image object
         } catch (error) {
-          // Handle any errors that may occur during execution
           console.error('Error in saveToGallery resolver:', error);
           throw new Error('An error occurred while saving the image');
         }
@@ -112,7 +102,7 @@ const resolvers = {
         throw new Error("User not authenticated");
       }
     },
-    
+
   },
 };
 
