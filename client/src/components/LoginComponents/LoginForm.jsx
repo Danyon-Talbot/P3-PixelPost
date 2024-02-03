@@ -34,8 +34,6 @@ export default function LoginForm() {
         email: "",
         password: "",
     });
-    const [login, { error, data }] = useMutation(LOGIN_USER);
-    const [loginError, setLoginError] = useState(null);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -48,16 +46,26 @@ export default function LoginForm() {
         });
     };
 
+    const [login, { error, data }] = useMutation(LOGIN_USER);
+    const [loginError, setLoginError] = useState(null);
+
     const handleLoginSubmit = async (event) => {
         event.preventDefault();
         console.log(formData);
         try {
-            const { data } = await login({
+            const response = await login({
                 variables: { ...formData },
             });
-            const username = data.login.user.username;
-
-            AuthService.login(data.login.token, username, () => {
+    
+            // Check if there are any errors in the mutation response
+            if (response.errors && response.errors.length > 0) {
+                throw new Error(response.errors[0].message);
+            }
+    
+            // Access the data returned by the mutation
+            const username = response.data.login.user.username;
+    
+            AuthService.login(response.data.login.token, username, () => {
                 setFormData({
                     email: '',
                     password: '',
@@ -71,7 +79,6 @@ export default function LoginForm() {
             setLoginError("Login failed. Please check your credentials");
         }
     };
-
     
     return (
         <FormContainer>
