@@ -1,9 +1,4 @@
 const typeDefs = `
-  scalar Upload
-  extend type Mutation {
-    imageUploader(file: Upload!): String!
-  }
-
   type User {
     _id: ID!
     username: String!
@@ -16,7 +11,7 @@ const typeDefs = `
     _id: ID!
     filename: String!
     contentType: String!
-    path: String!
+    owner: String!
   }
 
   type AuthPayload {
@@ -24,15 +19,28 @@ const typeDefs = `
     user: User!
   }
 
+  input SaveImageInput {
+    base64Image: String!
+    filename: String!
+    contentType: String!
+    owner: String!
+  }
+  type ImageResponse {
+    success: Boolean!
+    message: String
+  }
+
+
   type Query {
     user(username: String!): User
     getUserGallery(username: String!): [Image]
     userAll: [User]
   }
+
   type Mutation {
     createUser(username: String!, email: String!, password: String!): AuthPayload
     login(email: String!, password: String!): AuthPayload
-    saveToGallery(file: Upload!): Image
+    saveImage(input: SaveImageInput!): ImageResponse
   }
 `;
 

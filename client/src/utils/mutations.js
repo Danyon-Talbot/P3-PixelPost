@@ -27,12 +27,10 @@ export const LOGIN_USER = gql`
 `;
 
 export const SAVE_TO_GALLERY_MUTATION = gql`
-  mutation saveToGallery($file: Upload!) {
-    saveToGallery(file: $file) {
-      _id
-      filename
-      contentType
-      path
+  mutation saveImage($input: SaveImageInput!) {
+    saveImage(input: $input) {
+      success
+      message
     }
   }
 `;

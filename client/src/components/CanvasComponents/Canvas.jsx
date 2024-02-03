@@ -27,13 +27,8 @@ export default function Canvas(props) {
 
   const isAuthenticated = AuthService.loggedIn();
 
-  const [saveToGalleryMutation] = useMutation
-  (SAVE_TO_GALLERY_MUTATION, {
-    refetchQueries: [
-      QUERY_USER_GALLERY,
-      'getUserGallery'
-    ]
-  });
+  const [saveImage] = useMutation
+  (SAVE_TO_GALLERY_MUTATION);
 
   const captureAndSaveImage = async (event) => {
     event.preventDefault();
@@ -54,20 +49,21 @@ export default function Canvas(props) {
       // Convert the captured image to a data URL
       const capturedPNGData = canvasImage.toDataURL("image/png");
       console.log("Captured PNG Data");
-      // Convert the data URL to a Blob
-      const blob = await fetch(capturedPNGData).then((res) => res.blob());
-      console.log("Blob Created");
-      // Create a FormData object to send the file
-      const formData = new FormData();
-      formData.append("file", blob);
-      console.log("Form Data Appended")
+      
+      const owner = localStorage.getItem('username');
+      const input = {
+        base64Image: capturedPNGData,
+        filename: 'temporaryName',
+        contentType: 'image/png',
+        owner: owner,
+      };
 
       // DEBUGGING: Logs JWT token from storage
       console.log("Token from AuthService:", AuthService.getToken());
 
-      const result = await saveToGalleryMutation({
+      const result = await saveImage({
         variables: {
-          file: formData,
+          input: input,
         },
         context: {
           headers: {
@@ -79,7 +75,7 @@ export default function Canvas(props) {
       console.log("Request Headers:" , result.context.headers);
 
       
-      console.log("Called saveToGalleryMutation");
+      console.log("Called saveImage");
       if (result.errors) {
         // Handle GraphQL errors
         result.errors.forEach((error) => {
@@ -89,7 +85,7 @@ export default function Canvas(props) {
         console.log("Image Saved To Gallery");
       }
     } catch (error) {
-      console.log(JSON.stringify(error, null, 2));
+      console.log(error);
     }
   };
 
