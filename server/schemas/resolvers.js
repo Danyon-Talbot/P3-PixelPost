@@ -3,7 +3,8 @@ const { signToken, AuthenticationError } = require('../utils/auth');
 // const { GraphQLUpload } = require('graphql-upload/GraphQLUpload.mjs');
 const { createReadStream, createWriteStream } = require("fs");
 const path = require("path");
-const fs = require('fs'); // Import fs
+const fs = require('fs');
+const { atob } = require('atob');
 
 const resolvers = {
   // Upload: GraphQLUpload,
@@ -11,7 +12,23 @@ const resolvers = {
   Query: {
     userAll: async () => {
       return await User.find({})
-    }
+    },
+    getUserGallery: async (_, { username }) => {
+      try {
+        // Find the user by username
+        const user = await User.findOne({ username }).populate('gallery');
+        
+        if (!user) {
+          return [];
+        }
+    
+        // Extract and return the images from the user's gallery
+        return user.gallery;
+      } catch (error) {
+        console.error('Error fetching user gallery:', error);
+        throw new Error('Failed to fetch user gallery');
+      }
+    },
   },
   Mutation: {
     createUser: async (parent, { username, email, password }) => {
@@ -55,53 +72,40 @@ const resolvers = {
 
       return { token, user };
     },
-    saveToGallery: async (parent, { file }, context) => { 
-      const profile = context.profile;
-      if (profile) {
-        const { _id, username } = profile;
+    saveImage: async (_, { input }) => {
+      try {
+        const { base64Image, filename, contentType, owner } = input;
     
-        try {
-          const user = await User.findById(_id);
+        // Decode base64 data
+        const binaryData = Buffer.from(base64Image, 'base64');
     
-          if (!user) {
-            throw new Error('No User Found in Database');
-          }
+        // Create a new instance of the Image model
+        const newImage = new Image({
+          filename,
+          contentType,
+          owner,
+          data: binaryData,
+          owner,
+        });
     
-          const { createReadStream, filename } = await file;
-          const ext = path.extname(filename);
-          const newFilename = `${user._id}_${Date.now()}${ext}`;
-          const galleryDirectory = path.join(__dirname, `../globalGallery/${username}`);
+        // Save the image to the database
+        await newImage.save();
     
-          if (!fs.existsSync(galleryDirectory)) {
-            fs.mkdirSync(galleryDirectory, { recursive: true });
-          }
-    
-          const filePath = path.join(galleryDirectory, newFilename);
-          const writeStream = createWriteStream(filePath);
-    
-          createReadStream().pipe(writeStream);
-    
-          const image = new Image({
-            filename: newFilename,
-            contentType: ext.substring(1), // Remove the dot from the extension
-            path: filePath,
-          });
-    
-          await image.save();
-    
-          user.gallery.push(image); // Push the image object into the user's gallery array
-    
-          await user.save();
-    
-          return image; // Return the Image object
-        } catch (error) {
-          console.error('Error in saveToGallery resolver:', error);
-          throw new Error('An error occurred while saving the image');
-        }
-      } else {
-        throw new Error("User not authenticated");
+        // Return a response indicating success
+        return {
+          success: true,
+          message: 'Image saved successfully',
+        };
+      } catch (error) {
+        console.error('Error saving image:', error);
+        return {
+          success: false,
+          message: 'Failed to save image',
+          // Handle the error and return an appropriate response
+        };
       }
     },
+
 
   },
 };
