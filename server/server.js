@@ -32,6 +32,8 @@ const startApolloServer = async () => {
     app.get('*', (req, res) => {
       res.sendFile(path.join(__dirname, '../client/dist/index.html'));
     });
+  } else {
+    app.use(express.static('../client/dist'));
   }
 
   db.once('open', () => {
