@@ -4,7 +4,6 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "postinstall": "npm install",
     "start": "npm run start",
     "dev": "vite",
     "build": "vite build",
