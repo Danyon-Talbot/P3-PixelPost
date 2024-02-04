@@ -26,19 +26,10 @@ const startApolloServer = async () => {
 
   app.use('/graphql', expressMiddleware(server));
 
-  if (process.env.NODE_ENV === 'production') {
-    // Use the dynamic path based on the environment
-    const clientPath = path.join(__dirname, './client/dist');
-    app.use(express.static(clientPath));
-  } else {
-    // In local development, use the correct path
-    app.use(express.static(path.resolve('./client/dist')));
-  }
+  app.use(express.static(path.join(__dirname, '../client/dist')));
 
   app.get('*', (req, res) => {
-    // Send the index.html file from the correct path
-    const clientIndexPath = path.join(__dirname, './client/dist/index.html');
-    res.sendFile(clientIndexPath);
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
   });
   
   db.once('open', () => {
