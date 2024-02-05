@@ -92,21 +92,17 @@ const resolvers = {
 
       return { token, user };
     },
-    saveImage: async (_, { input }, context) => {
-      console.log('Context', context);
-      console.log('Save Image Decoded Token', context.user);
+    saveImage: async (_, { base64Image, filename, contentType, owner }, context) => {
       try {
-        const { base64Image, filename, contentType, owner } = input;
         // Decode base64 data
         const binaryData = Buffer.from(base64Image, 'base64');
-       
     
         // Check if the user is authenticated
-        if (context.user) { // Ensure context.user is not falsy
+        if (context.user) {
           const newImage = await Image.create({
             filename,
             contentType,
-            data: binaryData,
+            data: binaryData, // Save the binary data in the 'data' field
             owner,
           });
     
@@ -114,25 +110,23 @@ const resolvers = {
             { _id: context.user._id },
             { $addToSet: { gallery: newImage._id } }
           );
-
+    
           return {
             success: true,
             message: 'Image saved successfully',
             newImage
           };
-          
+    
         } else {
-          // Handle the case when the user is not authenticated
           throw new Error('User not authenticated');
         }
       } catch (error) {
         console.error('Error saving image:', error);
     
-        // Handle the error and return an appropriate response
         return {
           success: false,
           message: 'Failed to save image',
-          error: error.message, // Include the error message for debugging
+          error: error.message,
         };
       }
     },

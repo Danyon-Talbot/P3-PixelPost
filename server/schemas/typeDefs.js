@@ -21,19 +21,6 @@ const typeDefs = `
     user: User!
   }
 
-  input SaveImageInput {
-    base64Image: String!
-    filename: String!
-    contentType: String!
-    owner: String!
-  }
-  
-  type ImageResponse {
-    success: Boolean!
-    message: String
-  }
-
-
   type Query {
     userAll: [User]
     user(username: String!): User
@@ -45,7 +32,12 @@ const typeDefs = `
   type Mutation {
     createUser(username: String!, email: String!, password: String!): AuthPayload
     login(email: String!, password: String!): AuthPayload
-    saveImage(input: SaveImageInput!): ImageResponse
+    saveImage(base64Image: String!, filename: String!, contentType: String!, owner: String!): ImageResponse
+  }
+
+  type ImageResponse {
+    success: Boolean!
+    message: String
   }
 `;
 

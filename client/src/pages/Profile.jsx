@@ -3,14 +3,14 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { globalStyles } from '../components/StandardStyles/globalStyles';
 import { HomepageStyles } from "../components/StandardStyles/HomePageStyles";
 import AuthService from '../utils/auth';
-import Gallery from '../components/GalleryCompnents/Gallery'
+import Gallery from '../components/GalleryCompnents/Gallery';
 
 const Profile = () => {
 
     const {
         HomePage,
         UserProfilePage,
-        UserGallery,
+        UserGalleryPage,
     } = HomepageStyles;
 
     const {
@@ -49,10 +49,10 @@ const Profile = () => {
                 )}
             
             </HomePage>
-            <UserGallery>
+            <UserGalleryPage>
                 <H1>Your Gallery</H1>
                 <Gallery />
-            </UserGallery>
+            </UserGalleryPage>
         </UserProfilePage>
     );
 };

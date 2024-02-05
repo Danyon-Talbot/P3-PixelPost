@@ -42,24 +42,26 @@ export default function Canvas(props) {
       }
 
       // Use html2canvas to capture the Pixels component as an image
-      const canvasImage = await html2canvas(canvasElement);
-      console.log("Canvas Image Created");
+      const canvasImage = await html2canvas(canvasElement, { type: "image/png" });
+      console.log("Canvas Image Created", canvasElement);
       // Convert the captured image to a data URL
       const capturedPNGData = canvasImage.toDataURL("image/png");
       console.log("Captured PNG Data");
+      console.log(capturedPNGData);
       
+      // Remove data URL prefix
+    const base64Content = capturedPNGData.split(',')[1];
+
       // SETS VARIABLES FOR SAVEIMAGE
       const result = await saveImage({
         variables: {
-          input: {
-            base64Image: capturedPNGData,
-            filename: 'temporaryName',
-            contentType: 'image/png',
-            owner: AuthService.getProfile().authenticatedPerson.username,
-          },
+          base64Image: base64Content, // Use the extracted base64 content
+          filename: 'temporaryName',
+          contentType: 'image/png',
+          owner: AuthService.getProfile().authenticatedPerson.username
         },
       });
-      
+
       
       console.log("Called saveImage");
       if (result.errors) {
