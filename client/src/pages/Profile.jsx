@@ -2,19 +2,15 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { globalStyles } from '../components/StandardStyles/globalStyles';
 import { HomepageStyles } from "../components/StandardStyles/HomePageStyles";
-import { profileStyles } from '../components/ProfileComponents/profileStyling/ProfileStyles';
 import AuthService from '../utils/auth';
+import Gallery from '../components/GalleryCompnents/Gallery'
 
 const Profile = () => {
-    const { username } = useParams(); // Get the username from the URL parameter
-
-    const {
-        UserProfilePage,
-        UserGalleryDemo,
-    } = profileStyles;
 
     const {
         HomePage,
+        UserProfilePage,
+        UserGallery,
     } = HomepageStyles;
 
     const {
@@ -42,17 +38,21 @@ const Profile = () => {
     return (
         <UserProfilePage>
             <HomePage>
-                <H1>Welcome To Pixel Post</H1>
-                <H2>{storedUsername}</H2>
+                <H1>Welcome To Pixel Post {storedUsername}!</H1>
+                {/* <H2>{storedUsername}</H2> */}
                 <Button onClick={handleGoToEditor}>Open Canvas</Button>
                 {isAuthenticated && (
-                    <Button onClick={handleLogOut}>Logout</Button>
+                    <div> 
+                        <Button>Edit Profile</Button>
+                        <Button onClick={handleLogOut}>Logout</Button>
+                    </div>
                 )}
             
             </HomePage>
-            <UserGalleryDemo>
+            <UserGallery>
                 <H1>Your Gallery</H1>
-            </UserGalleryDemo>
+                <Gallery />
+            </UserGallery>
         </UserProfilePage>
     );
 };

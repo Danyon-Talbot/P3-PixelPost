@@ -1,25 +1,54 @@
 const { User, Image } = require('../models/index');
 const { signToken, AuthenticationError } = require('../utils/auth');
-const path = require("path");
-const { atob } = require('atob');
+const { Buffer } = require('buffer');
+
 
 const resolvers = {
   Query: {
     userAll: async () => {
-      return await User.find({})
+      return User.find().populate('gallery')
     },
-    images: async (parent, { username }) => {
-      const params = username ? { username } : {};
-      return Image.find(params).sort({ createdAt: -1 });
-    },
-    getUserGallery: async (parent, arg, context) => {
+    me: async (parent, args, context) => {
       if (context.user) {
         return User.findOne({ _id: context.user._id }).populate('gallery');
       }
-      throw new AuthenticationError('Could not authenticate user.', {
-        code: 'UNAUTHENTICATED',
-      });
-    }, 
+      throw AuthenticationError;
+    },
+    allImages: async () => {
+      try {
+        const images = await Image.find();
+        return images;
+      } catch (error) {
+        throw new Error(`Failed to fetch all images: ${error.message}`);
+      }
+    },
+    userImages: async (_, __, context) => {
+      try {
+        if (!context.user) {
+          throw new Error('User not authenticated');
+        }
+    
+        const user = await User.findById(context.user._id).populate('gallery');
+        if (!user) {
+          throw new Error('User not found');
+        }
+    
+        // Convert binary image data to base64 for each image in the user's gallery
+        const userGallery = user.gallery.map((image) => ({
+          _id: image._id,
+          filename: image.filename,
+          contentType: image.contentType,
+          owner: image.owner,
+          data: image.data.toString('base64'), // Convert binary data to base64
+          createdAt: image.createdAt,
+        }));
+    
+        return userGallery;
+      } catch (error) {
+        throw new Error(`Failed to fetch user images: ${error.message}`);
+      }
+    },
+    
   },
   Mutation: {
     createUser: async (parent, { username, email, password }) => {

@@ -11,12 +11,11 @@ export const profileStyles = {
         padding: 1rem 4rem 2rem 4rem;
         margin-top: 1rem;
         background-color: ${colors.prussianblue};
-        width: 100%;
     `,
 
-    UserGalleryDemo: styled.div`
+    UserGallery: styled.div`
         display: flex;
-        justify-content: center;
+        justify-content: flex-start;
         border: 1px solid;
         border-color: ${colors.richblack};
         border-radius: 0.25rem;
@@ -24,6 +23,8 @@ export const profileStyles = {
         margin-top: 1rem;
         margin-left: 1rem;
         background-color: ${colors.celeste};
-        width: 80%;
+        width: 100%;
+        flex-direction: column;
+        align-items: top;
     `
 }

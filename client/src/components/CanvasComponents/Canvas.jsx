@@ -48,15 +48,6 @@ export default function Canvas(props) {
       const capturedPNGData = canvasImage.toDataURL("image/png");
       console.log("Captured PNG Data");
       
-      // const owner = AuthService.getProfile().authenticatedPerson.username
-
-      // SETS INPUT FOR VARIABLES
-      // const input = {
-      //   base64Image: capturedPNGData,
-      //   filename: 'temporaryName',
-      //   contentType: 'image/png',
-      // };
-
       // SETS VARIABLES FOR SAVEIMAGE
       const result = await saveImage({
         variables: {
