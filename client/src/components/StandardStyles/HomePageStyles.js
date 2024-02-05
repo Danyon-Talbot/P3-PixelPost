@@ -15,6 +15,7 @@ export const HomepageStyles = {
         align-items: center;
         background-color: ${colors.celeste};
         font-family: 'Chivo Mono', monospace;
+        width: fit-content;
     `,
     UserProfilePage: styled.div`
         display: flex;
@@ -29,7 +30,7 @@ export const HomepageStyles = {
 
     UserGalleryPage: styled.div`
         display: flex;
-        justify-content: flex-start;
+        justify-content: center;
         border: 1px solid;
         border-color: ${colors.richblack};
         border-radius: 0.25rem;
@@ -37,11 +38,22 @@ export const HomepageStyles = {
         margin-top: 1rem;
         margin-left: 1rem;
         background-color: ${colors.celeste};
-        width: 100%;
+        max-width: 80%;
         flex-direction: column;
         align-items: top;
+        max-height: 100vh;
+        overflow-y: auto;
     `,
 
-    
+    ProfileOptions: styled.div`
+        display: flex;
+        flex-direction: column;
+    `,
+
+    HomeOptions: styled.div`
+        margin-top: 2rem;
+    `
+
+
 
 }
