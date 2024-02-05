@@ -9,19 +9,34 @@ export const LOGIN_USER = gql`
   }
 `;
 
+export const QUERY_IMAGES = gql`
+  query getImages {
+    images {
+      _id
+      filename
+      contentType
+      owner
+      data
+      createdAt
+    }
+  }
+`;
+
+
 export const QUERY_USER_GALLERY = gql`
-  query getUserGallery($username: String!) {
-    getUserGallery(username: $username) {
+  query getUserGallery {
+    getUserGallery {
+      _id
+      username
+      email
       gallery {
-        images {
-          name
-          desc
-          img {
-            data
-            contentType
-          }
-        }
+        _id
+        filename
+        contentType
+        owner
+        data
+        createdAt
       }
     }
   }
-`
+`;

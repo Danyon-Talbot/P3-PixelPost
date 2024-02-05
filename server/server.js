@@ -8,11 +8,12 @@ const { typeDefs, resolvers } = require('./schemas');
 const db = require('./config/connection');
 
 const PORT = process.env.PORT || 3007;
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: ({ req }) => {
-    authMiddleware({ req });
+    return authMiddleware({ req });
   },
 });
 
@@ -24,8 +25,10 @@ const startApolloServer = async () => {
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
 
-  app.use('/graphql', expressMiddleware(server));
-
+  app.use('/graphql', expressMiddleware(server, {
+    context: authMiddleware
+  }));
+  
   app.use(express.static(path.join(__dirname, '../client/dist')));
 
   app.get('*', (req, res) => {

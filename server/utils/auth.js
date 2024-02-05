@@ -2,6 +2,7 @@ const { GraphQLError } = require('graphql');
 const jwt = require('jsonwebtoken');
 
 const secret = process.env.JWT_SECRET || 'testSecret';
+const expiration = '2h';
 
 module.exports = {
 AuthenticationError: new GraphQLError('Could not authenticate user.', {
@@ -17,21 +18,23 @@ AuthenticationError: new GraphQLError('Could not authenticate user.', {
     }
 
     if (!token) {
-      return req;
+      console.log('Token not found in request.');
+      return {}; // Return an empty object if no token is found
     }
 
     try {
       const { authenticatedPerson } = jwt.verify(token, secret, { maxAge: expiration });
-      req.user = authenticatedPerson;
-    } catch {
-      console.log('Invalid token');
+      console.log('Authenticated user:', authenticatedPerson);
+      return { user: authenticatedPerson }; // Set the user field in context
+    } catch (error) {
+      console.log('Invalid token:', error);
       throw new Error('Invalid Token');
     }
-
-    return req;
   },
+  
+  
   signToken: ({ email, username, _id }) => {
     const payload = { email, username, _id };
-    return jwt.sign({ data: payload }, secret, { expiresIn: '2h' });
+    return jwt.sign({ authenticatedPerson: payload }, secret, { expiresIn: '2h' });
   },
 };

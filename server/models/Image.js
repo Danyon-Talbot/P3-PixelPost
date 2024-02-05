@@ -1,4 +1,6 @@
 const { Schema, model } = require('mongoose');
+const dateFormat = require('../utils/dateFormat.js');
+
 
 const imageSchema = new Schema({
   filename: String,
@@ -8,6 +10,11 @@ const imageSchema = new Schema({
   },
   owner: String,
   data: Buffer, // Store the image data as a Buffer
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    get: (timestamp) => dateFormat(timestamp),
+  },
 });
 
 const Image = model('Image', imageSchema);

@@ -25,6 +25,7 @@ const typeDefs = `
     contentType: String!
     owner: String!
   }
+  
   type ImageResponse {
     success: Boolean!
     message: String
@@ -33,7 +34,9 @@ const typeDefs = `
 
   type Query {
     user(username: String!): User
-    getUserGallery(username: String!): [Image]
+    getUserGallery: User
+    images(username: String!): [Image]
+    image(username: String!): Image
     userAll: [User]
   }
 
