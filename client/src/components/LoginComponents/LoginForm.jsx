@@ -37,8 +37,6 @@ export default function LoginForm() {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
-        console.log("name:", name); //REMOVE THIS BEFORE LIVE PUSH
-        console.log("Value:", value); //REMOVE THIS BEFORE LIVE PUSH
 
         setFormData({
             ...formData,
@@ -51,7 +49,7 @@ export default function LoginForm() {
 
     const handleLoginSubmit = async (event) => {
         event.preventDefault();
-        console.log(formData);
+        console.log(formData); // REMOVE THIS BEFORE LIVE PUSH
         try {
             const response = await login({
                 variables: { ...formData },

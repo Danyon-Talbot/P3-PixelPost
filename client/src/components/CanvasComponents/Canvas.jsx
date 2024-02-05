@@ -8,7 +8,6 @@ import html2canvas from "html2canvas";
 import { exportComponentAsPNG } from 'react-component-export-image';
 
 import { SAVE_TO_GALLERY_MUTATION } from "../../utils/mutations.js";
-import { QUERY_USER_GALLERY } from "../../utils/queries.js";
 
 export default function Canvas(props) {
   const {
@@ -27,8 +26,7 @@ export default function Canvas(props) {
 
   const isAuthenticated = AuthService.loggedIn();
 
-  const [saveImage] = useMutation
-  (SAVE_TO_GALLERY_MUTATION);
+  const [saveImage] = useMutation(SAVE_TO_GALLERY_MUTATION);
 
   const captureAndSaveImage = async (event) => {
     event.preventDefault();
@@ -50,30 +48,27 @@ export default function Canvas(props) {
       const capturedPNGData = canvasImage.toDataURL("image/png");
       console.log("Captured PNG Data");
       
-      const owner = localStorage.getItem('username');
-      const input = {
-        base64Image: capturedPNGData,
-        filename: 'temporaryName',
-        contentType: 'image/png',
-        owner: owner,
-      };
+      // const owner = AuthService.getProfile().authenticatedPerson.username
 
-      // DEBUGGING: Logs JWT token from storage
-      console.log("Token from AuthService:", AuthService.getToken());
+      // SETS INPUT FOR VARIABLES
+      // const input = {
+      //   base64Image: capturedPNGData,
+      //   filename: 'temporaryName',
+      //   contentType: 'image/png',
+      // };
 
+      // SETS VARIABLES FOR SAVEIMAGE
       const result = await saveImage({
         variables: {
-          input: input,
-        },
-        context: {
-          headers: {
-            "content-type": "application/json",
-            Authorization: `Bearer ${AuthService.getToken()}`,
+          input: {
+            base64Image: capturedPNGData,
+            filename: 'temporaryName',
+            contentType: 'image/png',
+            owner: AuthService.getProfile().authenticatedPerson.username,
           },
         },
       });
-      console.log("Request Headers:" , result.context.headers);
-
+      
       
       console.log("Called saveImage");
       if (result.errors) {

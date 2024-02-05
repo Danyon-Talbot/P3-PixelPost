@@ -86,7 +86,7 @@ const handleSubmit = async (e) => {
       });
 
       // Handle success
-      console.log('User created:', data.createUser);
+      console.log('User created:', data.createUser); // REMOVE THIS BEFORE LIVE PUSH
       const token = data.createUser.token;
       localStorage.setItem('token', token);
 
