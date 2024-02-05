@@ -27,11 +27,12 @@ export const LOGIN_USER = gql`
 `;
 
 export const SAVE_TO_GALLERY_MUTATION = gql`
-  mutation saveImage($input: SaveImageInput!) {
-    saveImage(input: $input) {
+  mutation saveImage($base64Image: String!, $filename: String!, $contentType: String!, $owner: String!) {
+    saveImage(base64Image: $base64Image, filename: $filename, contentType: $contentType, owner: $owner) {
       success
       message
     }
   }
 `;
+
 

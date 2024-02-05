@@ -28,19 +28,20 @@ export default function Gallery() {
     if (!images.length) {
       return <h3>No Images Found</h3>;
     }
-
     return (
       <GalleryContainer>
         {images.map((image) => (
           <img
             key={image._id}
-            src={`data:${image.contentType};base64,${image.data}`} // Fix src attribute
+            src={`data:${image.contentType.trim()};base64,${image.data}`} // Trim any extra whitespace
             alt={image.filename}
           />
         ))}
       </GalleryContainer>
     );
   };
+
+  console.log('User Images:', userImages); // Added console log for userImages
 
   return <ImagesList images={userImages} />;
 }

@@ -15,3 +15,10 @@ body {
   min-width: fit-content;
   background-color: #EAEAEA;
 }
+
+
+.App {
+  display: flex;
+  justify-content: center;
+  min-width: fit-content;
+}
