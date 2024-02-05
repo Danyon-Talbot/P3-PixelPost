@@ -34,7 +34,7 @@ export default function Gallery() {
         {images.map((image) => (
           <img
             key={image._id}
-            src={`data:${image.contentType};base64,${image.data}`}
+            src={`data:${image.contentType};base64,${image.data}`} // Fix src attribute
             alt={image.filename}
           />
         ))}

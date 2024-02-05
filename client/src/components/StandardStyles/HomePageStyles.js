@@ -27,7 +27,7 @@ export const HomepageStyles = {
         background-color: ${colors.prussianblue};
     `,
 
-    UserGallery: styled.div`
+    UserGalleryPage: styled.div`
         display: flex;
         justify-content: flex-start;
         border: 1px solid;
