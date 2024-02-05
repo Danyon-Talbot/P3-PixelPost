@@ -4,7 +4,7 @@ const typeDefs = `
     username: String!
     email: String!
     password: String
-    gallery: [Image]
+    gallery: [Image]!
   }
 
   type Image {
@@ -12,6 +12,8 @@ const typeDefs = `
     filename: String!
     contentType: String!
     owner: String!
+    data: String!
+    createdAt: String!
   }
 
   type AuthPayload {
@@ -33,11 +35,11 @@ const typeDefs = `
 
 
   type Query {
-    user(username: String!): User
-    getUserGallery: User
-    images(username: String!): [Image]
-    image(username: String!): Image
     userAll: [User]
+    user(username: String!): User
+    allImages: [Image]!
+    userImages: [Image]!
+    me: User
   }
 
   type Mutation {

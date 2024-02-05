@@ -23,20 +23,61 @@ export const QUERY_IMAGES = gql`
 `;
 
 
-export const QUERY_USER_GALLERY = gql`
-  query getUserGallery {
-    getUserGallery {
+export const QUERY_USER = gql`
+  query getUser($userId: ID!) {
+    getUser(userId: $userId) {
       _id
-      username
       email
       gallery {
         _id
         filename
         contentType
-        owner
         data
         createdAt
       }
     }
   }
 `;
+
+export const QUERY_ME = gql`
+  query me {
+    me {
+      _id
+      username
+      email
+      thoughts {
+        _id
+        thoughtText
+        thoughtAuthor
+        createdAt
+      }
+    }
+  }
+`;
+
+export const GET_ALL_IMAGES = gql`
+  query {
+    allImages {
+      _id
+      filename
+      contentType
+      owner
+      data
+      createdAt
+    }
+  }
+`;
+
+
+export const GET_USER_IMAGES = gql`
+  query {
+    userImages {
+      _id
+      filename
+      contentType
+      owner
+      data
+      createdAt
+    }
+  }
+`
