@@ -4,7 +4,10 @@ import { useQuery } from "@apollo/client";
 import { GET_USER_IMAGES } from '../../utils/queries'; // Import the userImages query
 
 export default function Gallery() {
-  const { GalleryContainer } = GalleryStyles;
+  const { 
+    GalleryContainer,
+    ImageContainer,
+  } = GalleryStyles;
 
   // Use the useQuery hook to fetch the user's gallery
   const { loading, error, data } = useQuery(GET_USER_IMAGES); // Use the userImages query
@@ -31,11 +34,13 @@ export default function Gallery() {
     return (
       <GalleryContainer>
         {images.map((image) => (
-          <img
-            key={image._id}
-            src={`data:${image.contentType.trim()};base64,${image.data}`} // Trim any extra whitespace
-            alt={image.filename}
-          />
+          <ImageContainer key={image._id}> {/* Move key to ImageContainer */}
+            <img
+              className="gallery-image"
+              src={`data:${image.contentType.trim()};base64,${image.data}`}
+              alt={image.filename}
+            />
+          </ImageContainer>
         ))}
       </GalleryContainer>
     );

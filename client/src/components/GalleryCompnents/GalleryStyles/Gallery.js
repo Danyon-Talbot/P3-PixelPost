@@ -4,18 +4,24 @@ import { colors } from '../../StandardStyles/colors';
 export const GalleryStyles = {
 
     GalleryContainer: styled.div`
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(200px, 1fr)); /* Adjust minmax values as needed */
+        gap: 2rem;
         max-width: 100%;
         border: 1px solid;
         border-radius: 0.25rem;
-        padding: 0.5rem;
-        background: ${colors.prussianblue}
+        padding: 1rem;
+        background: ${colors.prussianblue};
+        justify-content: center;
+        align-items: center;
     `,
 
     ImageContainer: styled.div`
-        
-    `
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    `,
 
 }

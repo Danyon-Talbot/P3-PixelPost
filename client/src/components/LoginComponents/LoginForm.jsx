@@ -49,7 +49,6 @@ export default function LoginForm() {
 
     const handleLoginSubmit = async (event) => {
         event.preventDefault();
-        console.log(formData); // REMOVE THIS BEFORE LIVE PUSH
         try {
             const response = await login({
                 variables: { ...formData },

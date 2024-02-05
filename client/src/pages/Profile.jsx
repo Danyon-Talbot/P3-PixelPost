@@ -11,6 +11,8 @@ const Profile = () => {
         HomePage,
         UserProfilePage,
         UserGalleryPage,
+        ProfileOptions,
+        HomeOptions,
     } = HomepageStyles;
 
     const {
@@ -39,15 +41,16 @@ const Profile = () => {
         <UserProfilePage>
             <HomePage>
                 <H1>Welcome To Pixel Post {storedUsername}!</H1>
+                <HomeOptions> 
                 {/* <H2>{storedUsername}</H2> */}
                 <Button onClick={handleGoToEditor}>Open Canvas</Button>
                 {isAuthenticated && (
-                    <div> 
+                    <ProfileOptions>
                         <Button>Edit Profile</Button>
                         <Button onClick={handleLogOut}>Logout</Button>
-                    </div>
+                    </ProfileOptions>
                 )}
-            
+                </HomeOptions>
             </HomePage>
             <UserGalleryPage>
                 <H1>Your Gallery</H1>

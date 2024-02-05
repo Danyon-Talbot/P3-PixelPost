@@ -22,3 +22,8 @@ body {
   justify-content: center;
   min-width: fit-content;
 }
+
+.gallery-image {
+  max-width: 250px;
+  max-height: 250px;
+}
