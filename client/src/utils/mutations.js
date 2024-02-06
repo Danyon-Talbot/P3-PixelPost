@@ -41,9 +41,11 @@ export const UPDATE_USER = gql`
       _id
       username
       email
+      password 
     }
   }
 `;
+
 
 export const DELETE_USER = gql`
   mutation deleteUser {

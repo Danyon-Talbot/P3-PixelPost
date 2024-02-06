@@ -73,6 +73,9 @@ export default function LoginForm() {
 
           const storedUsername = AuthService.getUsername();
           navigate(`/profile/${storedUsername}`);
+          setTimeout(() => {
+            window.location.reload();
+          }, 10);
         });
       } catch (e) {
         console.error(e);

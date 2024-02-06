@@ -83,7 +83,7 @@ const resolvers = {
       const correctPw = await user.isCorrectPassword(password);
     
       if (!correctPw) {
-        throw new AuthenticationError('Incorrect password');
+        throw new Error('Incorrect password');
       }
     
       // Generate a JWT token with user information
@@ -136,33 +136,40 @@ const resolvers = {
         if (!context.user) {
           throw new Error('User not authenticated');
         }
-
+    
         const updatedFields = {};
-
+    
         if (username) {
           updatedFields.username = username;
         }
-
+    
         if (email) {
           updatedFields.email = email;
         }
-
+    
         if (password) {
           updatedFields.password = password;
         }
-
+    
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
           { $set: updatedFields },
           { new: true }
         );
-
+    
+        // Update the owner field of images in the user's gallery
+        await Image.updateMany(
+          { owner: context.user.username }, // Find images with the old owner username
+          { $set: { owner: updatedUser.username } } // Update the owner to the new username
+        );
+    
         return updatedUser;
       } catch (error) {
         console.error('Error updating user:', error);
         throw new Error('An error occurred while updating the user');
       }
     },
+    
     deleteUser: async (_, __, context) => {
       try {
         // Check if the user is authenticated
