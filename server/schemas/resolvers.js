@@ -2,7 +2,6 @@ const { User, Image } = require('../models/index');
 const { signToken, AuthenticationError } = require('../utils/auth');
 const { Buffer } = require('buffer');
 
-
 const resolvers = {
   Query: {
     userAll: async () => {
@@ -65,7 +64,7 @@ const resolvers = {
           email,
           password,
         });
-        
+      
         // Creates token based on the user data
         const token = signToken(user);
         return { token, user };

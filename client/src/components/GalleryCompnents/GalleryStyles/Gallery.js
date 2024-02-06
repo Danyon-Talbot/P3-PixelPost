@@ -14,7 +14,7 @@ export const GalleryStyles = {
         background: ${colors.prussianblue};
         justify-content: center;
         align-items: center;
-        max-height: 600px;
+        max-height: 650px;
         overflow-y: auto;
     `,
 

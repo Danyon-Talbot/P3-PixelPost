@@ -48,6 +48,7 @@ export default function LoginForm() {
 
   const handleLoginSubmit = async (event) => {
     event.preventDefault();
+    localStorage.removeItem('token');
     setLoading(true); // Set loading state to true
 
     setTimeout(async () => {
