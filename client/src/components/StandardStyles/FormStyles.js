@@ -29,20 +29,21 @@ export const FormStyles = {
 
     // Individual Input Styles for potential individual styling
     NameInput: styled.input`
-        width: 100%;
+        width: 95%;
     `,
 
     EmailInput: styled.input`
-        width: 100%;
+        width: 95%;
     `,
 
     PasswordInput: styled.input`
-        width: 100%;
+        width: 95%;
     `,
     Warning: styled.div`
         width: 100%;
         font-size: 16px;
-        margin-top: 0;
+        align-self: center;
+        margin-top: 0.1rem;
         margin-bottom: 0.5rem;
         border-radius: 0.25rem;
         background-color: ${colors.coolgrey};

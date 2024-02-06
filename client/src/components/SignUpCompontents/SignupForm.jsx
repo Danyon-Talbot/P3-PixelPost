@@ -4,6 +4,7 @@ import { globalStyles } from "../StandardStyles/globalStyles";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from '@apollo/client';
 import { CREATE_USER_MUTATION } from "../../utils/mutations";
+import { ClipLoader } from "react-spinners"; // Import the spinner component
 
 export default function SignUpForm() {
   const {
@@ -37,6 +38,8 @@ export default function SignUpForm() {
     password: "",
   });
 
+  const [loading, setLoading] = useState(false); // State for loading spinner
+
   const validateFormData = () => {
     let isValid = true;
     const newErrors = { ...errors };
@@ -65,62 +68,65 @@ export default function SignUpForm() {
 
     setErrors(newErrors);
     return isValid;
-};
+  };
 
-const [createUser] = useMutation(CREATE_USER_MUTATION);
+  const [createUser] = useMutation(CREATE_USER_MUTATION);
 
-const handleChange = (e) => {
-  const { name, value } = e.target;
-  setFormData({ ...formData, [name]: value });
-};
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
+  const handleReturnToLogin = () => {
+    setLoading(true); // Set loading state to true
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  if (validateFormData()) {
-    // Remove the existing token from localStorage
-    localStorage.removeItem('token');
-
-    try {
-      const { data } = await createUser({
-        variables: { ...formData },
-      });
-
-      // Handle success
-      console.log('User created:', data.createUser);
-      const token = data.createUser.token;
-      localStorage.setItem('token', token);
-
-      // Optionally, you can redirect the user to another page here
+    setTimeout(() => {
+      setLoading(false); // Set loading state back to false
       navigate('/login');
-    } catch (error) {
-      // Handle GraphQL errors
-      console.error('GraphQL Error:', error);
+    }, 1500); // 2-second delay
 
-      // Check if the error message contains specific keywords
-      if (error.message.includes('USER_ALREADY_EXISTS')) {
-        setErrors({
-          ...errors,
-          email: 'This email is already registered',
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (validateFormData()) {
+      // Remove the existing token from localStorage
+      localStorage.removeItem('token');
+
+      try {
+        const { data } = await createUser({
+          variables: { ...formData },
         });
-      } else if (error.message.includes('USER_CREATION_ERROR')) {
-        // Handle other user creation errors
-        setErrors({
-          ...errors,
-          general: 'An error occurred while creating the user',
-        });
-      } else {
-        console.error('Unexpected error:', error);
+
+        // Handle success
+        console.log('User created:', data.createUser);
+        const token = data.createUser.token;
+        localStorage.setItem('token', token);
+
+        // Optionally, you can redirect the user to another page here
+        handleReturnToLogin();
+      } catch (error) {
+        // Handle GraphQL errors
+        console.error('GraphQL Error:', error);
+
+        // Check if the error message contains specific keywords
+        if (error.message.includes('USER_ALREADY_EXISTS')) {
+          setErrors({
+            ...errors,
+            email: 'This email is already registered',
+          });
+        } else if (error.message.includes('USER_CREATION_ERROR')) {
+          // Handle other user creation errors
+          setErrors({
+            ...errors,
+            general: 'An error occurred while creating the user',
+          });
+        } else {
+          console.error('Unexpected error:', error);
+        }
       }
     }
-  }
-};
-  
-  const handleReturnToLogin = () => {
-    navigate('/login');
   };
-  
-
 
   return (
     <FormContainer>
@@ -154,9 +160,16 @@ const handleSubmit = async (e) => {
           />
           <Warning className="error">{errors.password}</Warning>
         </FormGroup>
-        <FormButton type="submit" className="signupButton">
-          Create Account
-        </FormButton>
+        {loading ? (
+          // Use the ClipLoader component from react-spinners as a loading spinner
+          <div>
+            <ClipLoader color="#000" loading={loading} size={35} />
+          </div>
+        ) : (
+          <FormButton type="submit" className="signupButton">
+            Create Account
+          </FormButton>
+        )}
       </Form>
       <FormButton onClick={handleReturnToLogin}>
         Have an Account? Log In
