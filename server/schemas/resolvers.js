@@ -74,24 +74,26 @@ const resolvers = {
         throw new Error('An error occurred while creating the user', 'USER_CREATION_ERROR', error);
       }
     },
-    
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
-
+    
       if (!user) {
-        throw AuthenticationError;
+        throw new Error('User not found');
       }
-
+    
       const correctPw = await user.isCorrectPassword(password);
-
+    
       if (!correctPw) {
-        throw AuthenticationError;
+        throw new AuthenticationError('Incorrect password');
       }
-
+    
+      // Generate a JWT token with user information
       const token = signToken(user);
-
+    
+      // Send the token in the response along with user data
       return { token, user };
     },
+    
     saveImage: async (_, { base64Image, filename, contentType, owner }, context) => {
       try {
         // Decode base64 data
@@ -128,6 +130,38 @@ const resolvers = {
           message: 'Failed to save image',
           error: error.message,
         };
+      }
+    },
+    updateUser: async (_, { username, email, password }, context) => {
+      try {
+        if (!context.user) {
+          throw new Error('User not authenticated');
+        }
+
+        const updatedFields = {};
+
+        if (username) {
+          updatedFields.username = username;
+        }
+
+        if (email) {
+          updatedFields.email = email;
+        }
+
+        if (password) {
+          updatedFields.password = password;
+        }
+
+        const updatedUser = await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $set: updatedFields },
+          { new: true }
+        );
+
+        return updatedUser;
+      } catch (error) {
+        console.error('Error updating user:', error);
+        throw new Error('An error occurred while updating the user');
       }
     },
     

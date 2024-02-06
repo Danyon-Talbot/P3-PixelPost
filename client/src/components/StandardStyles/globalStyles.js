@@ -3,8 +3,8 @@ import { colors } from './colors';
 
 export const globalStyles = {
     H1: styled.h1`
-    margin-bottom: 1rem;
-    text-transform: uppercase;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
     `,
 
     H2: styled.h2`
