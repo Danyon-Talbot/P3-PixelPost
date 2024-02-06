@@ -48,6 +48,7 @@ const Editor = () => {
 
     const handleReturnToLogin = () => {
         navigate('/login');
+        window.location.reload();
     };
 
     const navigateToProfile = () => {

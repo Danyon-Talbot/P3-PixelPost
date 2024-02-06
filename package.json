@@ -10,9 +10,12 @@
     "install": "cd server && npm i && cd ../client && npm i",
     "seed": "cd server && npm run seed",
     "build": "cd client && npm run build",
-    "render-build":"npm install && npm run build"
+    "render-build": "npm install && npm run build"
   },
   "devDependencies": {
     "concurrently": "^5.3.0"
+  },
+  "dependencies": {
+    "react-spinners": "^0.13.8"
   }
 }

@@ -109,7 +109,7 @@ const handleSubmit = async (e) => {
 
   return (
     <FormContainer>
-      <LoginForm onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit}>
         <H2>Sign Up</H2>
         <FormGroup>
           <H3>Username</H3>
@@ -142,7 +142,7 @@ const handleSubmit = async (e) => {
         <FormButton type="submit" className="signupButton">
           Create Account
         </FormButton>
-      </LoginForm>
+      </Form>
       <FormButton onClick={handleReturnToLogin}>
         Have an Account? Log In
       </FormButton>

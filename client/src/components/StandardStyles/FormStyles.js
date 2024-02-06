@@ -15,7 +15,7 @@ export const FormStyles = {
         width: 100%
     `,
 
-    LoginForm: styled.form`
+    Form: styled.form`
         display: flex;
         flex-direction: column;
         align-items: center;

@@ -14,6 +14,8 @@ export const GalleryStyles = {
         background: ${colors.prussianblue};
         justify-content: center;
         align-items: center;
+        max-height: 600px;
+        overflow-y: auto;
     `,
 
     ImageContainer: styled.div`

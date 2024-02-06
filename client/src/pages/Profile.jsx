@@ -1,19 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { globalStyles } from '../components/StandardStyles/globalStyles';
 import { HomepageStyles } from "../components/StandardStyles/HomePageStyles";
+import { profileStyles } from '../components/ProfileComponents/profileStyling/ProfileStyles';
 import AuthService from '../utils/auth';
 import Gallery from '../components/GalleryCompnents/Gallery';
+import ProfileEditor from '../components/ProfileComponents/EditProfile'
 
 const Profile = () => {
 
     const {
         HomePage,
+        HomeOptions,
+    } = HomepageStyles;
+
+    const {
         UserProfilePage,
         UserGalleryPage,
         ProfileOptions,
-        HomeOptions,
-    } = HomepageStyles;
+    } = profileStyles
 
     const {
         H1,
@@ -35,18 +40,32 @@ const Profile = () => {
         navigate('/login');
     }
 
-    const storedUsername = localStorage.getItem('username');
+    const currentUser = AuthService.getProfile().authenticatedPerson.username
+
+    const [profileEditor, setHideProfileEditor] = useState(false);
+    const [editButtonText, setEditButtonText] = useState('Edit Profile');
+
+    function editProfile() {
+        setHideProfileEditor(!profileEditor)
+
+        editButtonText === 'Edit Profile'
+        ? setEditButtonText('Close Profile Editor')
+        : setEditButtonText('Edit Profile')
+    }
 
     return (
         <UserProfilePage>
             <HomePage>
-                <H1>Welcome To Pixel Post {storedUsername}!</H1>
+                <H1>Welcome To Pixel Post {currentUser}!</H1>
                 <HomeOptions> 
                 {/* <H2>{storedUsername}</H2> */}
                 <Button onClick={handleGoToEditor}>Open Canvas</Button>
                 {isAuthenticated && (
                     <ProfileOptions>
-                        <Button>Edit Profile</Button>
+                        {profileEditor && (
+                            <ProfileEditor />
+                        )}
+                        <Button onClick={editProfile}>{editButtonText}</Button>
                         <Button onClick={handleLogOut}>Logout</Button>
                     </ProfileOptions>
                 )}
