@@ -28,17 +28,12 @@ export default function ProfileEditor() {
   const [updateUser] = useMutation(UPDATE_USER);
   const [deleteUser] = useMutation(DELETE_USER);
 
-  const [nameFormData, setNameFormData] = useState({
-    username: AuthService.getProfile().authenticatedPerson.username, // Initialize with current username
-  });
-
-  const [emailFormData, setEmailFormData] = useState({
-    email: AuthService.getProfile().authenticatedPerson.email, // Initialize with current email
-  });
-
-  const [passwordFormData, setPasswordFormData] = useState({
+  const [formData, setFormData] = useState({
+    username: AuthService.getProfile().authenticatedPerson.username,
+    email: AuthService.getProfile().authenticatedPerson.email,
     password: "",
   });
+
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -51,57 +46,41 @@ export default function ProfileEditor() {
 
   const validateFormData = () => {
     let isValid = true;
-  
-    if (nameFormData.username.trim() === "") {
+
+    if (formData.username.trim() === "") {
       setNameError("Username is required");
       isValid = false;
     } else {
       setNameError("");
     }
-  
+
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    if (
-      emailFormData.email.trim() !== "" &&
-      !emailPattern.test(emailFormData.email)
-    ) {
+    if (formData.email.trim() !== "" && !emailPattern.test(formData.email)) {
       setEmailError("Invalid email address");
       isValid = false;
     } else {
       setEmailError("");
     }
-  
-    if (
-      passwordFormData.password.trim() !== "" &&
-      passwordFormData.password.length < 8
-    ) {
+
+    if (formData.password.trim() !== "" && formData.password.length < 8) {
       setPasswordError("Password must be at least 8 characters long");
       isValid = false;
     } else {
       setPasswordError("");
     }
-  
+
     return isValid;
   };
 
-  const handleNameChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setNameFormData({ ...nameFormData, [name]: value });
-  };
-
-  const handleEmailChange = (e) => {
-    const { name, value } = e.target;
-    setEmailFormData({ ...emailFormData, [name]: value });
-  };
-
-  const handlePasswordChange = (e) => {
-    const { name, value } = e.target;
-    setPasswordFormData({ ...passwordFormData, [name]: value });
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e, actionType) => {
     e.preventDefault();
     setCurrentAction(actionType); // Set the current action
-    
+
     if (actionType === 'delete') {
       // Handle delete action here
       setShowConfirmationButtons(true); // Show confirmation buttons for delete
@@ -110,40 +89,23 @@ export default function ProfileEditor() {
         try {
           setLoading(true); // Start loading spinner
 
-          let mutationVariables = {};
-
-          if (actionType === 'updateUsername') {
-            mutationVariables = {
-              username: nameFormData.username,
-            };
-          } else if (actionType === 'updateEmail') {
-            mutationVariables = {
-              email: emailFormData.email,
-            };
-          } else if (actionType === 'updatePassword') {
-            mutationVariables = {
-              password: passwordFormData.password,
-            };
-          }
-
           const { data } = await updateUser({
-            variables: mutationVariables,
+            variables: {
+              ...formData,
+            },
           });
 
           // Handle success
           console.log('User updated:', data.updateUser); // REMOVE THIS BEFORE LIVE PUSH
 
           setTimeout(() => {
-            setLoading(false); // Stop loading spinner after a delay
-            // Destroy the old token and log the user out
             AuthService.logout(); // Add a logout function to destroy the token
-            navigate('/login'); // Redirect to login page
+            navigate('/login'); // Redirect to the login page
           }, 3000); // Display "Updating User, Logging Out" for 3 seconds (adjust as needed);
         } catch (error) {
           // Handle GraphQL errors
           console.error('Error updating user:', error.message);
           console.error('GraphQL Error:', error);
-          setLoading(false); // Stop loading spinner on error
         }
       }
     }
@@ -156,7 +118,7 @@ export default function ProfileEditor() {
       // Perform the delete user mutation
       await deleteUser();
 
-      // Log the user out and redirect to login page
+      // Log the user out and redirect to the login page
       AuthService.logout();
       navigate('/login');
     } catch (error) {
@@ -173,55 +135,66 @@ export default function ProfileEditor() {
     <ProfileEditorContainer>
       <H3>Profile Editor</H3>
       <Form onSubmit={handleSubmit}>
-        <NameInput
-          name="username"
-          value={nameFormData.username}
-          onChange={handleNameChange}
-        />
-        <Warning className="error">{nameError}</Warning>
-        <ProfileEditorButton type="submit" disabled={loading}>Update Username</ProfileEditorButton>
-        {currentAction === 'updateUsername' && loading && (
-          <RingLoader color="#36D7B7" size={20} />
-        )}
+        <FormGroup>
+          <NameInput
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+          />
+          <Warning className="error">{nameError}</Warning>
+          <ProfileEditorButton type="submit" disabled={loading}>
+            Update Username
+          </ProfileEditorButton>
+          {currentAction === 'updateUsername' && loading && (
+            <RingLoader color="#36D7B7" size={20} />
+          )}
+        </FormGroup>
+        <FormGroup>
+          <EmailInput
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+          />
+          <Warning className="error">{emailError}</Warning>
+          <ProfileEditorButton type="submit" disabled={loading}>
+            Update Email
+          </ProfileEditorButton>
+          {currentAction === 'updateEmail' && loading && (
+            <RingLoader color="#36D7B7" size={20} />
+          )}
+        </FormGroup>
+        <FormGroup>
+          <PasswordInput
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+          />
+          <Warning className="error">{passwordError}</Warning>
+          <ProfileEditorButton type="submit" disabled={loading}>
+            Update Password
+          </ProfileEditorButton>
+          {currentAction === 'updatePassword' && loading && (
+            <RingLoader color="#36D7B7" size={20} />
+          )}
+        </FormGroup>
+        <br />
+        <FormGroup>
+          <DeleteUserButton onClick={(e) => handleSubmit(e, 'delete')}>
+            Delete User!!
+          </DeleteUserButton>
+          {showConfirmationButtons && (
+            <ConfirmationButtons>
+              <DeleteUserButton onClick={handleDeleteUser}>Yes</DeleteUserButton>
+              <NoDeleteUserButton onClick={handleCancelDelete}>No</NoDeleteUserButton>
+            </ConfirmationButtons>
+          )}
+          {deletingUser && (
+            <div className="loading-spinner">
+              <p>Deleting User...</p>
+            </div>
+          )}
+        </FormGroup>
       </Form>
-      <Form>
-        <EmailInput
-          name="email"
-          value={emailFormData.email}
-          onChange={handleEmailChange}
-        />
-        <Warning className="error">{emailError}</Warning>
-        <ProfileEditorButton type="submit" disabled={loading}>Update Email</ProfileEditorButton>
-        {currentAction === 'updateEmail' && loading && (
-          <RingLoader color="#36D7B7" size={20} />
-        )}
-      </Form>
-      <Form>
-        <PasswordInput
-          name="password"
-          value={passwordFormData.password}
-          onChange={handlePasswordChange}
-        />
-        <Warning className="error">{passwordError}</Warning>
-        <ProfileEditorButton type="submit" disabled={loading}>Update Password</ProfileEditorButton>
-        {currentAction === 'updatePassword' && loading && (
-          <RingLoader color="#36D7B7" size={20} />
-        )}
-      </Form>
-      <br />
-      <DeleteUserButton onClick={(e) => handleSubmit(e, 'delete')}>Delete User!!</DeleteUserButton>
-      {showConfirmationButtons && (
-        <ConfirmationButtons>
-          <DeleteUserButton onClick={handleDeleteUser}>Yes</DeleteUserButton>
-          <NoDeleteUserButton onClick={handleCancelDelete}>No</NoDeleteUserButton>
-        </ConfirmationButtons>
-      )}
-      {deletingUser && (
-        <div className="loading-spinner">
-          <RingLoader color="#36D7B7" size={60} />
-          <p>Deleting User...</p>
-        </div>
-      )}
     </ProfileEditorContainer>
   );
 }
