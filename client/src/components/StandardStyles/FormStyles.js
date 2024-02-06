@@ -29,20 +29,21 @@ export const FormStyles = {
 
     // Individual Input Styles for potential individual styling
     NameInput: styled.input`
-        width: 100%;
+        width: 95%;
     `,
 
     EmailInput: styled.input`
-        width: 100%;
+        width: 95%;
     `,
 
     PasswordInput: styled.input`
-        width: 100%;
+        width: 95%;
     `,
     Warning: styled.div`
         width: 100%;
         font-size: 16px;
-        margin-top: 0;
+        align-self: center;
+        margin-top: 0.1rem;
         margin-bottom: 0.5rem;
         border-radius: 0.25rem;
         background-color: ${colors.coolgrey};
@@ -67,5 +68,50 @@ export const FormStyles = {
             background-color: ${colors.malachite};
             border-color: ${colors.richblack};
         }
-    `
+    `,
+
+    ConfirmationButtons: styled.div`
+        margin-bottom: 1rem;
+        width: 100
+    `,
+    DeleteUserButton: styled.button`
+        font-size: 1rem;
+        background-color: ${colors.burgundy};
+        color: ${colors.platinum};
+        padding: 0.2rem 0.5rem;
+        margin-bottom: 1rem;
+        border-radius: 0.25rem;
+        text-transform: uppercase;
+        border: 1px solid ${colors.richblack};
+        transition: background-color 0.2s ease-in-out;
+        font-family: 'Chivo Mono', monospace;
+        width: 80%;
+
+        &:hover {
+            cursor: pointer;
+            background-color: ${colors.platinum};
+            border-color: ${colors.richblack};
+            color: ${colors.burgundy};
+        }
+    `,
+
+    NoDeleteUserButton: styled.button`
+        font-size: 1rem;
+        background-color: ${colors.malachite};
+        color: ${colors.richblack};
+        padding: 0.2rem 0.5rem;
+        margin-bottom: 1rem;
+        border-radius: 0.25rem;
+        text-transform: uppercase;
+        border: 1px solid ${colors.richblack};
+        transition: background-color 0.2s ease-in-out;
+        font-family: 'Chivo Mono', monospace;
+        width: 80%;
+
+        &:hover {
+            cursor: pointer;
+            background-color: ${colors.platinum};
+            border-color: ${colors.richblack};
+        }
+    `,
 }

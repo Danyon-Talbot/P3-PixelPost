@@ -163,6 +163,31 @@ const resolvers = {
         throw new Error('An error occurred while updating the user');
       }
     },
+    deleteUser: async (_, __, context) => {
+      try {
+        // Check if the user is authenticated
+        if (!context.user) {
+          throw new AuthenticationError('User not authenticated');
+        }
+    
+        // Delete the user
+        await User.deleteOne({ _id: context.user._id });
+    
+        // Delete all images associated with the user
+        await Image.deleteMany({ owner: context.user.username }); 
+        return {
+          success: true,
+          message: 'User and associated images deleted successfully',
+        };
+      } catch (error) {
+        console.error('Error deleting user:', error);
+        return {
+          success: false,
+          message: 'Failed to delete user and associated images',
+          error: error.message,
+        };
+      }
+    },
     
     
   },
