@@ -169,13 +169,12 @@ const resolvers = {
         if (!context.user) {
           throw new AuthenticationError('User not authenticated');
         }
-
+    
         // Delete the user
         await User.deleteOne({ _id: context.user._id });
-
+    
         // Delete all images associated with the user
-        await Image.deleteMany({ owner: context.user._id });
-
+        await Image.deleteMany({ owner: context.user.username }); 
         return {
           success: true,
           message: 'User and associated images deleted successfully',
@@ -189,6 +188,7 @@ const resolvers = {
         };
       }
     },
+    
     
   },
 };

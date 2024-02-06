@@ -45,7 +45,8 @@ export default function ProfileEditor() {
   const [loading, setLoading] = useState(false); // State to control loading spinner
   const [deletingUser, setDeletingUser] = useState(false); // State to control deleting user
   const [showConfirmationButtons, setShowConfirmationButtons] = useState(false); // State to control visibility of confirmation buttons
-/////////////////////////
+  const [currentAction, setCurrentAction] = useState(""); // State to track the current action
+
   const navigate = useNavigate();
 
   const validateFormData = () => {
@@ -96,9 +97,10 @@ export default function ProfileEditor() {
     const { name, value } = e.target;
     setPasswordFormData({ ...passwordFormData, [name]: value });
   };
-//////////////////////////
+
   const handleSubmit = async (e, actionType) => {
     e.preventDefault();
+    setCurrentAction(actionType); // Set the current action
     
     if (actionType === 'delete') {
       // Handle delete action here
@@ -146,7 +148,7 @@ export default function ProfileEditor() {
       }
     }
   };
-///////////////////////////////////
+
   const handleDeleteUser = async () => {
     try {
       setDeletingUser(true); // Start deleting user spinner
@@ -163,8 +165,7 @@ export default function ProfileEditor() {
     }
   };
 
-
-const handleCancelDelete = () => {
+  const handleCancelDelete = () => {
     setShowConfirmationButtons(false); // Hide confirmation buttons when "No" is clicked
   };
 
@@ -172,33 +173,42 @@ const handleCancelDelete = () => {
     <ProfileEditorContainer>
       <H3>Profile Editor</H3>
       <Form onSubmit={handleSubmit}>
-          <NameInput
-            name="username"
-            value={nameFormData.username}
-            onChange={handleNameChange}
-          />
-          <Warning className="error">{nameError}</Warning>
-          <ProfileEditorButton type="submit">Update Username</ProfileEditorButton>
-        </Form>
-        <Form>
-          <EmailInput
-            name="email"
-            value={emailFormData.email}
-            onChange={handleEmailChange}
-          />
-          <Warning className="error">{emailError}</Warning>
-          <ProfileEditorButton type="submit">Update Email</ProfileEditorButton>
-         </Form>
-        <Form>
-          <PasswordInput
-            name="password"
-            value={passwordFormData.password}
-            onChange={handlePasswordChange}
-          />
-            <Warning className="error">{passwordError}</Warning>
-            <ProfileEditorButton type="submit">Update Password</ProfileEditorButton>
-        </Form>
-        <br />
+        <NameInput
+          name="username"
+          value={nameFormData.username}
+          onChange={handleNameChange}
+        />
+        <Warning className="error">{nameError}</Warning>
+        <ProfileEditorButton type="submit" disabled={loading}>Update Username</ProfileEditorButton>
+        {currentAction === 'updateUsername' && loading && (
+          <RingLoader color="#36D7B7" size={20} />
+        )}
+      </Form>
+      <Form>
+        <EmailInput
+          name="email"
+          value={emailFormData.email}
+          onChange={handleEmailChange}
+        />
+        <Warning className="error">{emailError}</Warning>
+        <ProfileEditorButton type="submit" disabled={loading}>Update Email</ProfileEditorButton>
+        {currentAction === 'updateEmail' && loading && (
+          <RingLoader color="#36D7B7" size={20} />
+        )}
+      </Form>
+      <Form>
+        <PasswordInput
+          name="password"
+          value={passwordFormData.password}
+          onChange={handlePasswordChange}
+        />
+        <Warning className="error">{passwordError}</Warning>
+        <ProfileEditorButton type="submit" disabled={loading}>Update Password</ProfileEditorButton>
+        {currentAction === 'updatePassword' && loading && (
+          <RingLoader color="#36D7B7" size={20} />
+        )}
+      </Form>
+      <br />
       <DeleteUserButton onClick={(e) => handleSubmit(e, 'delete')}>Delete User!!</DeleteUserButton>
       {showConfirmationButtons && (
         <ConfirmationButtons>
@@ -206,11 +216,10 @@ const handleCancelDelete = () => {
           <NoDeleteUserButton onClick={handleCancelDelete}>No</NoDeleteUserButton>
         </ConfirmationButtons>
       )}
-
-      {loading && (
+      {deletingUser && (
         <div className="loading-spinner">
           <RingLoader color="#36D7B7" size={60} />
-          <p>Updating User, Logging Out...</p>
+          <p>Deleting User...</p>
         </div>
       )}
     </ProfileEditorContainer>
