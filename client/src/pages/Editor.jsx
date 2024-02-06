@@ -53,8 +53,11 @@ const Editor = () => {
 
     const navigateToProfile = () => {
         const username = AuthService.getUsername();
-        navigate(`/profile/${username}`)
-    }
+        navigate(`/profile/${username}`);
+        setTimeout(() => {
+          window.location.reload();
+        }, 10);
+      }
 
     const isAuthenticated = AuthService.loggedIn(); 
 

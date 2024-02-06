@@ -8,7 +8,7 @@ import { CREATE_USER_MUTATION } from "../../utils/mutations";
 export default function SignUpForm() {
   const {
     FormContainer,
-    LoginForm,
+    Form,
     FormGroup,
     NameInput,
     EmailInput,
@@ -78,28 +78,43 @@ const handleChange = (e) => {
 const handleSubmit = async (e) => {
   e.preventDefault();
   if (validateFormData()) {
+    // Remove the existing token from localStorage
+    localStorage.removeItem('token');
+
     try {
       const { data } = await createUser({
-        variables: {
-          ...formData
-        },
+        variables: { ...formData },
       });
 
       // Handle success
-      console.log('User created:', data.createUser); // REMOVE THIS BEFORE LIVE PUSH
+      console.log('User created:', data.createUser);
       const token = data.createUser.token;
       localStorage.setItem('token', token);
 
-
       // Optionally, you can redirect the user to another page here
       navigate('/login');
-      } catch (error) {
-        // Handle GraphQL errors
-        console.error('Error creating user:', error.message)
-        console.error('GraphQL Error:', error);
+    } catch (error) {
+      // Handle GraphQL errors
+      console.error('GraphQL Error:', error);
+
+      // Check if the error message contains specific keywords
+      if (error.message.includes('USER_ALREADY_EXISTS')) {
+        setErrors({
+          ...errors,
+          email: 'This email is already registered',
+        });
+      } else if (error.message.includes('USER_CREATION_ERROR')) {
+        // Handle other user creation errors
+        setErrors({
+          ...errors,
+          general: 'An error occurred while creating the user',
+        });
+      } else {
+        console.error('Unexpected error:', error);
       }
     }
-  };
+  }
+};
   
   const handleReturnToLogin = () => {
     navigate('/login');
