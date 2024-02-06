@@ -6,7 +6,7 @@ import AuthService from "../../utils/auth";
 import { useMutation } from "@apollo/client";
 import { UPDATE_USER, DELETE_USER } from '../../utils/mutations'; // Import the mutation for updating and deleting the user
 import { useNavigate } from "react-router-dom";
-import { RingLoader } from "react-spinners"; // Import the RingLoader component
+import { ClipLoader } from "react-spinners"; // Import the RingLoader component
 
 export default function ProfileEditor() {
   const {
@@ -80,7 +80,7 @@ export default function ProfileEditor() {
   const handleSubmit = async (e, actionType) => {
     e.preventDefault();
     setCurrentAction(actionType); // Set the current action
-
+  
     if (actionType === 'delete') {
       // Handle delete action here
       setShowConfirmationButtons(true); // Show confirmation buttons for delete
@@ -88,16 +88,16 @@ export default function ProfileEditor() {
       if (validateFormData()) {
         try {
           setLoading(true); // Start loading spinner
-
+  
           const { data } = await updateUser({
             variables: {
               ...formData,
             },
           });
-
+  
           // Handle success
           console.log('User updated:', data.updateUser); // REMOVE THIS BEFORE LIVE PUSH
-
+  
           setTimeout(() => {
             AuthService.logout(); // Add a logout function to destroy the token
             navigate('/login'); // Redirect to the login page
@@ -106,6 +106,8 @@ export default function ProfileEditor() {
           // Handle GraphQL errors
           console.error('Error updating user:', error.message);
           console.error('GraphQL Error:', error);
+        } finally {
+          setLoading(false); // Stop loading spinner after the mutation is complete
         }
       }
     }
@@ -133,8 +135,9 @@ export default function ProfileEditor() {
 
   return (
     <ProfileEditorContainer>
-      <H3>Profile Editor</H3>
-      <Form onSubmit={handleSubmit}>
+    <H3>Profile Editor</H3>
+    {currentAction && <p>Updating User Info...</p>}
+    <Form onSubmit={handleSubmit}>
         <FormGroup>
           <NameInput
             name="username"
@@ -142,12 +145,17 @@ export default function ProfileEditor() {
             onChange={handleChange}
           />
           <Warning className="error">{nameError}</Warning>
-          <ProfileEditorButton type="submit" disabled={loading}>
-            Update Username
+          <ProfileEditorButton
+            type="submit"
+            disabled={loading}
+            onClick={(e) => handleSubmit(e, 'updateUsername')}
+          >
+            {currentAction === 'updateUsername' ? (
+              <ClipLoader color="#36D7B7" size={20} />
+            ) : (
+              'Update Username'
+            )}
           </ProfileEditorButton>
-          {currentAction === 'updateUsername' && loading && (
-            <RingLoader color="#36D7B7" size={20} />
-          )}
         </FormGroup>
         <FormGroup>
           <EmailInput
@@ -156,12 +164,17 @@ export default function ProfileEditor() {
             onChange={handleChange}
           />
           <Warning className="error">{emailError}</Warning>
-          <ProfileEditorButton type="submit" disabled={loading}>
-            Update Email
+          <ProfileEditorButton
+            type="submit"
+            disabled={loading}
+            onClick={(e) => handleSubmit(e, 'updateEmail')}
+          >
+            {currentAction === 'updateEmail' ? (
+              <ClipLoader color="#36D7B7" size={20} />
+            ) : (
+              'Update Email'
+            )}
           </ProfileEditorButton>
-          {currentAction === 'updateEmail' && loading && (
-            <RingLoader color="#36D7B7" size={20} />
-          )}
         </FormGroup>
         <FormGroup>
           <PasswordInput
@@ -170,12 +183,17 @@ export default function ProfileEditor() {
             onChange={handleChange}
           />
           <Warning className="error">{passwordError}</Warning>
-          <ProfileEditorButton type="submit" disabled={loading}>
-            Update Password
+          <ProfileEditorButton
+            type="submit"
+            disabled={loading}
+            onClick={(e) => handleSubmit(e, 'updatePassword')}
+          >
+            {currentAction === 'updatePassword' ? (
+              <ClipLoader color="#36D7B7" size={20} />
+            ) : (
+              'Update Password'
+            )}
           </ProfileEditorButton>
-          {currentAction === 'updatePassword' && loading && (
-            <RingLoader color="#36D7B7" size={20} />
-          )}
         </FormGroup>
         <br />
         <FormGroup>
@@ -184,14 +202,15 @@ export default function ProfileEditor() {
           </DeleteUserButton>
           {showConfirmationButtons && (
             <ConfirmationButtons>
-              <DeleteUserButton onClick={handleDeleteUser}>Yes</DeleteUserButton>
-              <NoDeleteUserButton onClick={handleCancelDelete}>No</NoDeleteUserButton>
+              {deletingUser ? (
+                <ClipLoader color="#36D7B7" size={20} loading={deletingUser} />
+              ) : (
+                <>
+                  <DeleteUserButton onClick={handleDeleteUser}>Yes</DeleteUserButton>
+                  <NoDeleteUserButton onClick={handleCancelDelete}>No</NoDeleteUserButton>
+                </>
+              )}
             </ConfirmationButtons>
-          )}
-          {deletingUser && (
-            <div className="loading-spinner">
-              <p>Deleting User...</p>
-            </div>
           )}
         </FormGroup>
       </Form>

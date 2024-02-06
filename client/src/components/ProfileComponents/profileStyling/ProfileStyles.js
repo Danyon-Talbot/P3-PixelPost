@@ -50,7 +50,7 @@ export const profileStyles = {
 
     ProfileEditorButton: styled.button`
         font-size: 1rem;
-        background-color: ${colors.malachite};
+        background-color: ${colors.coolgrey};
         color: ${colors.richblack};
         padding: 0.2rem 0.5rem;
         border-radius: 0.25rem;
